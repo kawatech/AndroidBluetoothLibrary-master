@@ -54,7 +54,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 //    private var mFab: FloatingActionButton? = null
 //    private var mEdRead: EditText? = null
     private var mEdRead: TextView? = null                  // kawa TextView に変更
-    private var mEdWrite: EditText? = null
+    private var mEdWrite: EditText? = null                  // kawa 削除した
     private var mService: BluetoothService? = null
     private var mWriter: BluetoothWriter? = null
     // kawa
@@ -126,7 +126,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         // add empty data
         mChart?.setData(data)
 
-  
+
 
         //  ラインの凡例の設定
         val l = mChart?.getLegend()
@@ -245,6 +245,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             set1 = LineDataSet(null, "データ1")
             set1.color = Color.BLUE
             set1.setDrawValues(false)
+            set1.setDrawCircles(false)          // データの頂点の丸を描画しない
             data.addDataSet(set1)
         }
 
@@ -252,6 +253,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             set2 = LineDataSet(null, "データ2")
             set2.color = Color.RED
             set2.setDrawValues(false)
+            set2.setDrawCircles(false)
             data.addDataSet(set2)  /////
         }
 
@@ -259,6 +261,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             set3 = LineDataSet(null, "データ3")        // kawa3
             set3.color = Color.GREEN
             set3.setDrawValues(false)
+            set3.setDrawCircles(false)
             data2.addDataSet(set3)
         }
 
