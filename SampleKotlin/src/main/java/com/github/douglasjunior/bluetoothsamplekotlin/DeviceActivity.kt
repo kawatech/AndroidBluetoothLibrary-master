@@ -43,6 +43,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -61,6 +62,10 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
     private val hexArray = "0123456789ABCDEF".toCharArray()
     private var mChart: LineChart? = null           // kawa2
     private var mChart2: LineChart? = null           // kawa3
+
+    private var offset = 9999.toInt()
+    private var restBuffer: ByteArray = byteArrayOf(0x02.toByte(), 0x02.toByte(), 0x02.toByte(), 0x02.toByte(), 0x02.toByte())
+    private var prevVer =0.toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +144,8 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         leftAxis?.textColor = Color.BLACK
     //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
     //    leftAxis?.axisMinValue = -3.0f
-        leftAxis?.setAxisMaxValue( 5000.0f)
+     //   leftAxis?.setAxisMaxValue( 5000.0f)
+        leftAxis?.setAxisMaxValue( 10000.0f)
         leftAxis?.setAxisMinValue(-3.0f)
 
    //     leftAxis?.setStartAtZero(false)
@@ -184,7 +190,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         leftAxis?.textColor = Color.BLACK
         //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
         //    leftAxis?.axisMinValue = -3.0f
-        leftAxis?.setAxisMaxValue( 100.0f)
+        leftAxis?.setAxisMaxValue( 1000.0f)
         leftAxis?.setAxisMinValue(-3.0f)
 
         //     leftAxis?.setStartAtZero(false)
@@ -225,6 +231,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
         //リアルタイムでデータを更新する場合はILineDataSetを使う
         //データをセットする際にインデックスを指定
+        // data, data2でそれぞれ0から始める
         var set1 = data.getDataSetByIndex(0)
         //2本目のグラフ（インデックスを1に）
         var set2 = data.getDataSetByIndex(1)       /////
@@ -234,10 +241,6 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
 
         if (set1 == null) {
-    //    set = LineDataSet(null, "サンプルデータ")
-    //    set.color = Color.BLUE
-    //    set.setDrawValues(false)
-    //    data.addDataSet(set)
 
 
   //      set1 = createSet()
@@ -273,17 +276,149 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         var fvalue1 = 9999f
         var fvalue2 = 9999f
         var fvalue3 = 9999f
+        var workBuffer = ByteArray(80)
 
-        var j = 0
+     //   var j = 0
+
+
+        var tmpOffset = 0
         val ll = buffer.size
+
+
+   // 最初の1回目、下2ビットが00までのオフセットを求める
+//   if( offset == 9999) {
+       for (i in 0..10) {
+           // 連続した2バイトの下2ビットが00
+           if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
+               offset = 5- (i % 5)
+               tmpOffset = i
+            //   Log.d(TAG, "onDataRead: " + tmpOffset)
+               mEdRead!!.setText(tmpOffset.toString())
+               if((tmpOffset == 5) or (tmpOffset == 0)) {
+                   offset = 0
+               }
+               break
+           }
+       }
+    /*
+       if(tmpOffset > 0) {
+           for (k in 0..(tmpOffset - 1)) {
+               buffer[k] = 0x02.toByte()
+           }
+       }
+ //  }
+
+     // workBufferに入れる
+    if(offset > 0) {
+        for (k in 0..(offset - 1)) {
+            workBuffer[k] = restBuffer[k]
+        }
+    }
+
+    // ここからNGが出る 直った()にする
+      for(k in 0..(ll - offset-1)) {
+          workBuffer[k + offset] = buffer[k]
+      }
+
+      // restBuffer[ ]に入れる
+    // ここからNGが出る
+    if(offset > 0) {
+        for (k in 0..(offset - 1)) {
+          //  restBuffer[k] = buffer[ll - offset + k + 1]
+            restBuffer[k] = buffer[ll - offset + k]
+        }
+    }
+*/
+
+ //   for(i in 0..15) {
+    for(i in 0..15) {                        // データが10個なら0と1
+        // 連続した2バイトの下2ビットが00
+        if (((buffer[i ]and(0x03)) == 0x00.toByte()) and ((buffer[i +1 ]and(0x03)) == 0x00.toByte())) {
+            var v = buffer[i + 1 ].toInt() and (0xFC)
+            var u = buffer[i ].toInt() and (0xFC)
+            var nn = u.shl(4) + v.ushr(2)
+
+            //   if (tmpOffset == prevVer) {
+            fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
+            break
+            //        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+            //   }
+            prevVer = tmpOffset
+
+            //    Log.d(TAG, "onDataRead: " + nn)
+            //    Log.d(TAG, "onDataRead: " + tmpOffset)
+            //  mEdRead!!.setText(nn.toString())
+        }
+    }
+
+    for(i in 0..15) {
+        // 連続した2バイトの下2ビットが01
+        if (((buffer[i ]and (0x03)) == 0x01.toByte()) and ((buffer[i +1]and(0x03)) == 0x01.toByte())) {
+            var v = buffer[i +1].toInt() and (0xFC)
+            var u = buffer[i ].toInt() and (0xFC)
+            var nn = u.shl(4) + v.ushr(2)
+            fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
+            break
+            //    fvalue2 = fvalue2 * 2
+        }
+    }
+
+    for(i in 0..15) {
+        // 1バイトの下2ビットが11
+        if ((workBuffer[i ]and(0x03)) == 0x03.toByte()) {
+            var u = workBuffer[i ].toInt() and (0xFC)
+            var nn = u.ushr(2)
+            fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
+            break
+        }
+
+    }
+
+
+
+
+
+    //    if (j % 2 == 0 ) {
+        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+        data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
+        data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
+
+        //  データを追加したら必ずよばないといけない
+     //   data.notifyDataChanged()
+        mChart?.notifyDataSetChanged()
+        mChart?.setVisibleXRangeMaximum(1000f)
+        mChart?.moveViewToX(data.xValCount - 1001.toFloat()) //  移動する
+
+
+        // kawa3
+   //     data2.notifyDataChanged()
+        mChart2?.notifyDataSetChanged()
+        mChart2?.setVisibleXRangeMaximum(1000f)
+        mChart2?.moveViewToX(data2.xValCount - 1001.toFloat()) //  移動する
+
+       // j++
+
+
+   // }   // end of for
+
+
+
+
+
+
+
+
+/*
         for( i in 0..ll-2 ){
+
+
          //   Log.d(TAG, "onDataRead: " + (buffer[i] and 0x03))       // これで、0, 0, 1, 1, 3の繰り返しOK
         //    mEdRead!!.setText((buffer[i] and 0x03).toString())              // 0, 1, 3の繰り返し、連続表示はない
 
             // 連続した2バイトの下2ビットが00
-            if (((buffer[i] and 0x03) == 0x00.toByte()) and ((buffer[i+1] and 0x03) == 0x00.toByte())) {
-                var v = buffer[i + 1].toInt() and 0xFC
-                var u = buffer[i].toInt() and 0xFC
+            if (((workBuffer[i]?. and (0x03)) == 0x00.toByte()) and ((workBuffer[i+1]?. and (0x03)) == 0x00.toByte())) {
+                var v = workBuffer[i + 1]!!.toInt() and 0xFC
+                var u = workBuffer[i]!!.toInt() and 0xFC
                 var nn = u.shl(4) + v.ushr(2)
 
            //     Log.d(TAG, "onDataRead: " + nn)           //  ここで書くようにLogが多くなると描画が遅くなる
@@ -294,17 +429,17 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             }
 
             // 連続した2バイトの下2ビットが01
-            if (((buffer[i] and 0x03) == 0x01.toByte()) and ((buffer[i+1] and 0x03) == 0x01.toByte())) {
-                var v = buffer[i + 1].toInt() and 0xFC
-                var u = buffer[i].toInt() and 0xFC
+            if (((workBuffer[i]?. and (0x03)) == 0x01.toByte()) and ((workBuffer[i+1]?. and (0x03)) == 0x01.toByte())) {
+                var v = workBuffer[i + 1]!!.toInt() and 0xFC
+                var u = workBuffer[i]!!.toInt() and 0xFC
                 var nn = u.shl(4) + v.ushr(2)
 
                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
             }
 
             // 1バイトの下2ビットが11
-            if ((buffer[i] and 0x03) == 0x03.toByte())  {
-                var u = buffer[i].toInt() and 0xFC
+            if ((workBuffer[i]?. and (0x03)) == 0x03.toByte())  {
+                var u = workBuffer[i]!!.toInt() and 0xFC
                 var nn = u.ushr(2)
 
  //   if(nn != 0) {
@@ -315,7 +450,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             }
 
        //     if ((j % 16 == 0 ) || (fvalue3 != 0f)) {
-            if (j % 16 == 0 ) {
+            if (j % 40 == 0 ) {
             //    data.addEntry(Entry(fvalue, set.entryCount), 0)
                 if (fvalue1 != 9999f) {
                     data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
@@ -346,7 +481,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
             //    Log.d(TAG, "onDataRead: " + i.toString())               // kawa これは動く
         }       // end of for
-
+*/
 
 
 

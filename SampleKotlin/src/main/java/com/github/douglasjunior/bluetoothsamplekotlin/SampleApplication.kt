@@ -49,8 +49,8 @@ class SampleApplication : Application() {
 //        config.bluetoothServiceClass = BluetoothLeService::class.java       // BLEのとき
 
         config.context = applicationContext
-//       config.bufferSize = 1024
-        config.bufferSize = 80           // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
+ //      config.bufferSize = 1024
+        config.bufferSize = 161        // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
         config.characterDelimiter = '\n'
         config.deviceName = "Bluetooth Sample"
         config.callListenersInMainThread = true

@@ -171,10 +171,18 @@ class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallba
     }
 
     override fun onStatusChange(status: BluetoothStatus) {
-        Log.d(TAG, "onStatusChange: $status")
+     //   Log.d(TAG, "onStatusChange: $status")                     // kawa4
         Toast.makeText(this, status.toString(), Toast.LENGTH_SHORT).show()
 
         if (status == BluetoothStatus.CONNECTED) {
+
+            val builder = AlertDialog.Builder(this)
+            startActivity(Intent(this@MainActivity, DeviceActivity::class.java))
+            builder.setCancelable(false)
+            builder.show()
+        }
+            // kawa4
+            /*
             val colors = arrayOf<CharSequence>("Try text", "Try picture")
 
             val builder = AlertDialog.Builder(this)
@@ -188,7 +196,7 @@ class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallba
             }
             builder.setCancelable(false)
             builder.show()
-        }
+        } */
 
     }
 
