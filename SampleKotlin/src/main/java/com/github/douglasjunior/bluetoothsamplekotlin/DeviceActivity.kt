@@ -363,6 +363,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         }
     }
 
+
     for(i in 0..15) {
         // 1バイトの下2ビットが11
         if ((workBuffer[i ]and(0x03)) == 0x03.toByte()) {
@@ -386,15 +387,15 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         //  データを追加したら必ずよばないといけない
      //   data.notifyDataChanged()
         mChart?.notifyDataSetChanged()
-        mChart?.setVisibleXRangeMaximum(1000f)
-        mChart?.moveViewToX(data.xValCount - 1001.toFloat()) //  移動する
+        mChart?.setVisibleXRangeMaximum(12500f)
+        mChart?.moveViewToX(data.xValCount - 12501.toFloat()) //  移動する
 
 
         // kawa3
    //     data2.notifyDataChanged()
         mChart2?.notifyDataSetChanged()
-        mChart2?.setVisibleXRangeMaximum(1000f)
-        mChart2?.moveViewToX(data2.xValCount - 1001.toFloat()) //  移動する
+        mChart2?.setVisibleXRangeMaximum(12500f)
+        mChart2?.moveViewToX(data2.xValCount - 12501.toFloat()) //  移動する
 
        // j++
 
