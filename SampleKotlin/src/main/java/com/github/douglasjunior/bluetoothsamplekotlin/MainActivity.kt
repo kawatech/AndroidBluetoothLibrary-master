@@ -30,6 +30,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -55,8 +59,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 
 
+// kawa NavigationView.を追加した
 
-class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallback, BluetoothService.OnBluetoothEventCallback, DeviceItemAdapter.OnAdapterItemClickListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+        BluetoothService.OnBluetoothScanCallback, BluetoothService.OnBluetoothEventCallback,
+        DeviceItemAdapter.OnAdapterItemClickListener {
  //   private var mChart: LineChart? = null           // kawa2
     private var pgBar: ProgressBar? = null
     private var mMenu: Menu? = null
@@ -67,18 +74,44 @@ class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallba
     private var mService: BluetoothService? = null
     private var mScanning: Boolean = false
 
+    private lateinit var mToolbar: Toolbar              // kawa Drawer
+    private var mGenre = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // original
+  //      val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+ //       setSupportActionBar(toolbar)
+
+
+
+
+        // kawa Drawer
+        mToolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(mToolbar)
+
+// kawa Drawer ナビゲーションドロワーの設定
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+
+
 
         //--------------- kawa2 ---------------------------
     //    mChart = findViewById(R.id.chart) as LineChart
      //   initChart()
 
 
-
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+// kawa Drawer 小駒マスクする、上の mToolbar を使う
+   //     val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+  //      setSupportActionBar(toolbar)
 
         pgBar = findViewById<View>(R.id.pg_bar) as ProgressBar
         pgBar!!.visibility = View.GONE
@@ -97,10 +130,42 @@ class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallba
 
         mService!!.setOnScanCallback(this)
         mService!!.setOnEventCallback(this)
+
     }
 
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
 
+        if (id == R.id.nav_30s) {
+            mToolbar.title = "30sec"
+            mGenre = 1
+        } else if (id == R.id.nav_60s) {
+            mToolbar.title = "60sec"
+            mGenre = 2
+        } else if (id == R.id.nav_90s) {
+            mToolbar.title = "90sec"
+            mGenre = 3
+        } else if (id == R.id.nav_120s) {
+            mToolbar.title = "120sec"
+            mGenre = 4
+        } else if (id == R.id.nav_150s) {
+            mToolbar.title = "150sec"
+            mGenre = 5
+        } else if (id == R.id.nav_180s) {
+            mToolbar.title = "90sec"
+            mGenre = 6
+        } else if (id == R.id.nav_210s) {
+            mToolbar.title = "120sec"
+            mGenre = 7
+        }
+
+     //   intent.putExtra("XSEC", mGenre)             // データを渡す
+
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
 
 
 
@@ -177,11 +242,15 @@ class MainActivity : AppCompatActivity(), BluetoothService.OnBluetoothScanCallba
         if (status == BluetoothStatus.CONNECTED) {
 
             val builder = AlertDialog.Builder(this)
-            startActivity(Intent(this@MainActivity, DeviceActivity::class.java))
+            // ここで画面を替える
+            val intent = Intent(this@MainActivity, DeviceActivity::class.java)
+
+            intent.putExtra("XSEC", mGenre)             // データを渡す, startAvtivity()の前にやる
+            startActivity(intent)
             builder.setCancelable(false)
             builder.show()
         }
-            // kawa4
+            // kawa4 画像の選択はマスクした
             /*
             val colors = arrayOf<CharSequence>("Try text", "Try picture")
 

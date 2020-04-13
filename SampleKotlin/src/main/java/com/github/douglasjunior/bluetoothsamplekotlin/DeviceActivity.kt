@@ -24,14 +24,21 @@
 package com.github.douglasjunior.bluetoothsamplekotlin
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothService
@@ -51,7 +58,7 @@ import kotlin.experimental.and
 /**
  * Created by douglas on 10/04/2017.
  */
-class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnClickListener {
+ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnClickListener {
 //    private var mFab: FloatingActionButton? = null
 //    private var mEdRead: EditText? = null
     private var mEdRead: TextView? = null                  // kawa TextView に変更
@@ -67,9 +74,41 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
     private var restBuffer: ByteArray = byteArrayOf(0x02.toByte(), 0x02.toByte(), 0x02.toByte(), 0x02.toByte(), 0x02.toByte())
     private var prevVer =0.toInt()
 
+    private lateinit var mToolbar: Toolbar              // kawa Drawer
+    private var mGenre = 0
+
+    private var xLenght = 1000f
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
+
+        // Mainから秒数の設定データをもらう
+        val value1 = intent.getIntExtra("XSEC",1)
+
+        if (value1 == 1 ) {
+            xLenght = 1875f
+  //          xLenght = 10f
+        }
+        else if (value1 == 2) {
+            xLenght = 3750f
+        }
+        else if (value1 == 3) {
+            xLenght = 5625f
+        }
+        else if (value1 == 4) {
+            xLenght = 7500f
+        }
+        else if (value1 == 5) {
+            xLenght = 9375f
+        }
+        else if (value1 == 6) {
+            xLenght = 11250f
+        }
+        else if (value1 == 2) {
+            xLenght = 13125f
+        }
 
         //--------------- kawa2 ---------------------------
             mChart = findViewById(R.id.chart) as LineChart
@@ -77,9 +116,28 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
             mChart2 = findViewById(R.id.chart2) as LineChart            // kawa3
             initChart2()
+// kawa Drawer ここの修正が必要
+ //       val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+//        setSupportActionBar(toolbar)
 
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+ /*
+        // kawa Drawer これがあると停止する
+        mToolbar = findViewById(R.id.toolbar)
+       setSupportActionBar(mToolbar)
+
+
+        // kawa Drawer ナビゲーションドロワーの設定
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+*/
+
+
+
  //       mFab = findViewById<View>(R.id.fab) as FloatingActionButton
  //       mFab!!.setOnClickListener(this)
   //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
@@ -93,14 +151,53 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
      //   val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
      //   inputMethodManager.hideSoftInputFromWindow(mEdWrite?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
 
+        // ボタンをタッチすると、MainActivityの画面に戻る
+        val btn1: Button = findViewById(R.id.monitor_btn)
+            btn1.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
 
     }
+
+/*
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.nav_30s) {
+            mToolbar.title = "30sec"
+            mGenre = 1
+        } else if (id == R.id.nav_60s) {
+            mToolbar.title = "60sec"
+            mGenre = 2
+        } else if (id == R.id.nav_90s) {
+            mToolbar.title = "90sec"
+            mGenre = 3
+        } else if (id == R.id.nav_120s) {
+            mToolbar.title = "120sec"
+            mGenre = 4
+        }
+
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+*/
+
 
     override fun onResume() {
         super.onResume()
         mService!!.setOnEventCallback(this)
 
     }
+
+
+
+
 
 
 
@@ -120,8 +217,10 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         mChart?.setScaleEnabled(true)
         mChart?.setDrawGridBackground(false)
 
+
         // if disabled, scaling can be done on x- and y-axis separately
         mChart?.setPinchZoom(true)
+
 
         // set an alternative background color
         mChart?.setBackgroundColor(Color.LTGRAY)
@@ -137,15 +236,28 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         val l = mChart?.getLegend()
         l?.form = Legend.LegendForm.LINE
         l?.textColor = Color.BLACK
+
         val xl = mChart?.getXAxis()
         xl?.textColor = Color.BLACK
         xl?.setLabelsToSkip(9)
+
+        //
+
+
+        xl?.setAxisMaxValue( 12500.0f)
+        xl?.setAxisMinValue(0f)
+        xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
+
+  //      mChart?.setVisibleXRangeMaximum(12500f)
+   //     mChart?.notifyDataSetChanged()
+  //      mChart?.invalidate()
+
+
         val leftAxis = mChart?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
     //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
     //    leftAxis?.axisMinValue = -3.0f
-     //   leftAxis?.setAxisMaxValue( 5000.0f)
-        leftAxis?.setAxisMaxValue( 10000.0f)
+        leftAxis?.setAxisMaxValue( 5000.0f)
         leftAxis?.setAxisMinValue(-3.0f)
 
    //     leftAxis?.setStartAtZero(false)
@@ -186,12 +298,24 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
         val xl = mChart2?.getXAxis()
         xl?.textColor = Color.BLACK
         xl?.setLabelsToSkip(9)
+
+        xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
+
+        // kawa5
+     //   xl?.setAxisMaxValue( 12500.0f)
+     //   xl?.setAxisMinValue(0f)
+
+        mChart2?.notifyDataSetChanged()
+        mChart2?.invalidate()
+
+
+
         val leftAxis = mChart2?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
         //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
         //    leftAxis?.axisMinValue = -3.0f
-        leftAxis?.setAxisMaxValue( 1000.0f)
-        leftAxis?.setAxisMinValue(-3.0f)
+        leftAxis?.setAxisMaxValue( 100.0f)
+        leftAxis?.setAxisMinValue(-10.0f)
 
         //     leftAxis?.setStartAtZero(false)
         leftAxis?.setDrawGridLines(true)
@@ -267,6 +391,7 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
             set3.setDrawCircles(false)
             data2.addDataSet(set3)
         }
+
 
         val date = Date()
         val format = SimpleDateFormat("HH:mm:ss")
@@ -366,8 +491,8 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
     for(i in 0..15) {
         // 1バイトの下2ビットが11
-        if ((workBuffer[i ]and(0x03)) == 0x03.toByte()) {
-            var u = workBuffer[i ].toInt() and (0xFC)
+        if ((buffer[i ]and(0x03)) == 0x03.toByte()) {
+            var u = buffer[i ].toInt() and (0xFC)
             var nn = u.ushr(2)
             fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
             break
@@ -377,26 +502,26 @@ class DeviceActivity : AppCompatActivity(), OnBluetoothEventCallback, View.OnCli
 
 
 
+// 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
 
-
-    //    if (j % 2 == 0 ) {
+    if (fvalue2 <= 4095 ) {
         data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
         data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
         data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
 
         //  データを追加したら必ずよばないといけない
-     //   data.notifyDataChanged()
+        //   data.notifyDataChanged()
         mChart?.notifyDataSetChanged()
-        mChart?.setVisibleXRangeMaximum(12500f)
-        mChart?.moveViewToX(data.xValCount - 12501.toFloat()) //  移動する
+        mChart?.setVisibleXRangeMaximum(xLenght)
+        mChart?.moveViewToX(data.xValCount - xLenght + 1f) //  移動する
 
 
         // kawa3
-   //     data2.notifyDataChanged()
+        //     data2.notifyDataChanged()
         mChart2?.notifyDataSetChanged()
-        mChart2?.setVisibleXRangeMaximum(12500f)
-        mChart2?.moveViewToX(data2.xValCount - 12501.toFloat()) //  移動する
-
+        mChart2?.setVisibleXRangeMaximum(xLenght)
+        mChart2?.moveViewToX(data2.xValCount - xLenght + 1f) //  移動する
+    }
        // j++
 
 

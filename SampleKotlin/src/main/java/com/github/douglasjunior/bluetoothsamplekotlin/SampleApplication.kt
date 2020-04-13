@@ -46,11 +46,13 @@ class SampleApplication : Application() {
         val config = BluetoothConfiguration()
 
         config.bluetoothServiceClass = BluetoothClassicService::class.java //  BluetoothClassicService.class or BluetoothLeService.class
-//        config.bluetoothServiceClass = BluetoothLeService::class.java       // BLEのとき
+//        config.bluetoothServiceClass = BluetoothLeService::class.ja81va       // BLEのとき
 
         config.context = applicationContext
  //      config.bufferSize = 1024
-        config.bufferSize = 161        // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
+        config.bufferSize = 81         // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
+ //       config.bufferSize = 17
+
         config.characterDelimiter = '\n'
         config.deviceName = "Bluetooth Sample"
         config.callListenersInMainThread = true

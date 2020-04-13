@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
+
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,11 +26,6 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Log data:" />
-
-            <TextView
                 android:id="@+id/ed_read"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,20 +35,51 @@
                 android:focusable="false"
                 android:inputType="none" />
 
+            <Button
+                android:id="@+id/monitor_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="戻る" />
+
+
+
+
+
+
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10" />
+                android:layout_weight="20" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="5" />
+                android:layout_weight="10" />
+
+
+
+
+
 
         </LinearLayout>
 
 
+
     </FrameLayout>
-</LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer"/>
+
+
+
+
+    </android.support.v4.widget.DrawerLayout>
