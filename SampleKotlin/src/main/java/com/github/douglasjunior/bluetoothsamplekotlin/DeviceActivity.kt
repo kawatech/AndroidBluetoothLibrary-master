@@ -78,7 +78,7 @@ import kotlin.experimental.and
     private var mGenre = 0
 
     private var xLenght = 1000f
-
+    private var loopCount = 1f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +106,7 @@ import kotlin.experimental.and
         else if (value1 == 6) {
             xLenght = 11250f
         }
-        else if (value1 == 2) {
+        else if (value1 == 7) {
             xLenght = 13125f
         }
 
@@ -244,11 +244,12 @@ import kotlin.experimental.and
         //
 
 
-        xl?.setAxisMaxValue( 12500.0f)
-        xl?.setAxisMinValue(0f)
+    //    xl?.setAxisMaxValue( 12500.0f)
+    //    xl?.setAxisMinValue(0f)
         xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
 
   //      mChart?.setVisibleXRangeMaximum(12500f)
+
    //     mChart?.notifyDataSetChanged()
   //      mChart?.invalidate()
 
@@ -455,74 +456,93 @@ import kotlin.experimental.and
     }
 */
 
- //   for(i in 0..15) {
-    for(i in 0..15) {                        // データが10個なら0と1
-        // 連続した2バイトの下2ビットが00
-        if (((buffer[i ]and(0x03)) == 0x00.toByte()) and ((buffer[i +1 ]and(0x03)) == 0x00.toByte())) {
-            var v = buffer[i + 1 ].toInt() and (0xFC)
-            var u = buffer[i ].toInt() and (0xFC)
-            var nn = u.shl(4) + v.ushr(2)
 
-            //   if (tmpOffset == prevVer) {
-            fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
-            break
-            //        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-            //   }
-            prevVer = tmpOffset
+         for (i in 0..15) {                        // データが10個なら0と1
+             // 連続した2バイトの下2ビットが00
+             if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
+                 var v = buffer[i + 1].toInt() and (0xFC)
+                 var u = buffer[i].toInt() and (0xFC)
+                 var nn = u.shl(4) + v.ushr(2)
 
-            //    Log.d(TAG, "onDataRead: " + nn)
-            //    Log.d(TAG, "onDataRead: " + tmpOffset)
-            //  mEdRead!!.setText(nn.toString())
-        }
-    }
+                 //   if (tmpOffset == prevVer) {
+                 fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
+                 break
+                 //        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+                 //   }
+                 prevVer = tmpOffset
 
-    for(i in 0..15) {
-        // 連続した2バイトの下2ビットが01
-        if (((buffer[i ]and (0x03)) == 0x01.toByte()) and ((buffer[i +1]and(0x03)) == 0x01.toByte())) {
-            var v = buffer[i +1].toInt() and (0xFC)
-            var u = buffer[i ].toInt() and (0xFC)
-            var nn = u.shl(4) + v.ushr(2)
-            fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
-            break
-            //    fvalue2 = fvalue2 * 2
-        }
-    }
+                 //    Log.d(TAG, "onDataRead: " + nn)
+                 //    Log.d(TAG, "onDataRead: " + tmpOffset)
+                 //  mEdRead!!.setText(nn.toString())
+             }
+         }
+
+         for (i in 0..15) {
+             // 連続した2バイトの下2ビットが01
+             if (((buffer[i] and (0x03)) == 0x01.toByte()) and ((buffer[i + 1] and (0x03)) == 0x01.toByte())) {
+                 var v = buffer[i + 1].toInt() and (0xFC)
+                 var u = buffer[i].toInt() and (0xFC)
+                 var nn = u.shl(4) + v.ushr(2)
+                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
+                 break
+                 //    fvalue2 = fvalue2 * 2
+             }
+         }
 
 
-    for(i in 0..15) {
-        // 1バイトの下2ビットが11
-        if ((buffer[i ]and(0x03)) == 0x03.toByte()) {
-            var u = buffer[i ].toInt() and (0xFC)
-            var nn = u.ushr(2)
-            fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
-            break
-        }
+         for (i in 0..15) {
+             // 1バイトの下2ビットが11
+             if ((buffer[i] and (0x03)) == 0x03.toByte()) {
+                 var u = buffer[i].toInt() and (0xFC)
+                 var nn = u.ushr(2)
+                 fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
+                 break
+             }
 
-    }
-
+         }
 
 
 // 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
 
-    if (fvalue2 <= 4095 ) {
-        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-        data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
-        data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
+         if (fvalue2 <= 4095) {
+             data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+             data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
+             data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
 
-        //  データを追加したら必ずよばないといけない
-        //   data.notifyDataChanged()
-        mChart?.notifyDataSetChanged()
-        mChart?.setVisibleXRangeMaximum(xLenght)
-        mChart?.moveViewToX(data.xValCount - xLenght + 1f) //  移動する
+             //  データを追加したら必ずよばないといけない
+             //   data.notifyDataChanged()
+             mChart?.notifyDataSetChanged()
+             mChart?.setVisibleXRangeMaximum(xLenght)
+             mChart?.setVisibleXRangeMinimum(xLenght)
+       //      mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
+        //     mChart?.moveViewToX(0f)
+
+             // kawa3
+             //     data2.notifyDataChanged()
+             mChart2?.notifyDataSetChanged()
+             mChart2?.setVisibleXRangeMaximum(xLenght)
+             mChart2?.setVisibleXRangeMinimum(xLenght)
 
 
-        // kawa3
-        //     data2.notifyDataChanged()
-        mChart2?.notifyDataSetChanged()
-        mChart2?.setVisibleXRangeMaximum(xLenght)
-        mChart2?.moveViewToX(data2.xValCount - xLenght + 1f) //  移動する
-    }
-       // j++
+             if (loopCount < xLenght) {
+                 mChart?.invalidate()
+                 mChart2?.invalidate()
+             }else {
+                 mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
+                 mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
+                 loopCount = xLenght
+             }
+
+         //    mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
+
+
+             loopCount++
+         }
+
+   //  }
+
+
+    // j++
 
 
    // }   // end of for

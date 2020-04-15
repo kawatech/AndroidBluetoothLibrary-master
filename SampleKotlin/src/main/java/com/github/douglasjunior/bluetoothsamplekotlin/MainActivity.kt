@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mToolbar.title = "90sec"
             mGenre = 6
         } else if (id == R.id.nav_210s) {
-            mToolbar.title = "120sec"
+            mToolbar.title = "210sec"
             mGenre = 7
         }
 

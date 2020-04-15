@@ -50,8 +50,8 @@ class SampleApplication : Application() {
 
         config.context = applicationContext
  //      config.bufferSize = 1024
-        config.bufferSize = 81         // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
- //       config.bufferSize = 17
+        config.bufferSize = 81       // kawa2  losteakの治具が1回に80Byte送信するのでそれに合わせる
+ //       config.bufferSize = 41
 
         config.characterDelimiter = '\n'
         config.deviceName = "Bluetooth Sample"
