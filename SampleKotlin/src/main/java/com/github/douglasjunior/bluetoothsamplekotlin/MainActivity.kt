@@ -158,8 +158,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else if (id == R.id.nav_210s) {
             mToolbar.title = "210sec"
             mGenre = 7
-        }
-
+        } else if (id == R.id.nav_15s) {
+            mToolbar.title = "15sec"
+            mGenre = 8
+    }
      //   intent.putExtra("XSEC", mGenre)             // データを渡す
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)

@@ -51,6 +51,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import java.lang.Math.abs
+import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -84,66 +85,85 @@ import kotlin.experimental.and
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
 
-        // Mainから秒数の設定データをもらう
-        val value1 = intent.getIntExtra("XSEC",1)
-
-        if (value1 == 1 ) {
-            xLenght = 1875f
-  //          xLenght = 10f
-        }
-        else if (value1 == 2) {
-            xLenght = 3750f
-        }
-        else if (value1 == 3) {
-            xLenght = 5625f
-        }
-        else if (value1 == 4) {
-            xLenght = 7500f
-        }
-        else if (value1 == 5) {
-            xLenght = 9375f
-        }
-        else if (value1 == 6) {
-            xLenght = 11250f
-        }
-        else if (value1 == 7) {
-            xLenght = 13125f
-        }
-
-        //--------------- kawa2 ---------------------------
-            mChart = findViewById(R.id.chart) as LineChart
-           initChart()
-
-            mChart2 = findViewById(R.id.chart2) as LineChart            // kawa3
-            initChart2()
-// kawa Drawer ここの修正が必要
- //       val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-//        setSupportActionBar(toolbar)
-
- /*
-        // kawa Drawer これがあると停止する
-        mToolbar = findViewById(R.id.toolbar)
-       setSupportActionBar(mToolbar)
+        // kawa Drawer ここの修正が必要
+        //       val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+         //    setSupportActionBar(toolbar)
 
 
-        // kawa Drawer ナビゲーションドロワーの設定
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name)
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
+               // kawa Drawer これがあると停止する
+               mToolbar = findViewById(R.id.toolbar)
+        //      setSupportActionBar(mToolbar)
 
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-*/
+/* ----------------------------------------------------------------------------------------------
+         Mainから秒数の設定データをもらう。キーワードがXSECでvaluew1に値が入る
+         この値によって30秒ごとにX軸の幅を設定する。
+ ------------------------------------------------------------------------------------------------- */
+               val value1 = intent.getIntExtra("XSEC",1)
+
+               if (value1 == 1 ) {
+               mToolbar.title = "30sec"
+                   xLenght = 1875f
+               //    xLenght = 187f                 // 試しに幅を 1/10　にするとき
+               }
+               else if (value1 == 2) {
+                   mToolbar.title = "60sec"
+                   xLenght = 3750f
+               }
+               else if (value1 == 3) {
+                   mToolbar.title = "90sec"
+                   xLenght = 5625f
+               }
+               else if (value1 == 4) {
+                   mToolbar.title = "120sec"
+                   xLenght = 7500f
+               }
+               else if (value1 == 5) {
+                   mToolbar.title = "150sec"
+                   xLenght = 9375f
+               }
+               else if (value1 == 6) {
+                   xLenght = 11250f
+               }
+               else if (value1 == 7) {
+                   mToolbar.title = "210sec"
+                   xLenght = 13125f
+               }
+               else if (value1 == 8) {
+                       mToolbar.title = "15sec"
+                       xLenght = 938f
+               }
+        setSupportActionBar(mToolbar)
+               /* --------------- kawa2 ---------------------------
+                   グラフ（チャート）の初期設定、2段で2つ分
+               ---------------------------------------------------- */
+                   mChart = findViewById(R.id.chart) as LineChart
+                  initChart()
+
+                   mChart2 = findViewById(R.id.chart2) as LineChart            // kawa3
+                   initChart2()
+
+
+/* -------------------------------------------------------------------------------------
+               // kawa Drawer ナビゲーションドロワーの設定
+               // メニューが全画面になってしまう
+               val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+               val toggle = ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name)
+               drawer.addDrawerListener(toggle)
+               toggle.syncState()
+
+               val navigationView = findViewById<NavigationView>(R.id.nav_view)
+               navigationView.setNavigationItemSelectedListener(this)
+     -------------------------------------------------------------------------------------  */
 
 
 
  //       mFab = findViewById<View>(R.id.fab) as FloatingActionButton
  //       mFab!!.setOnClickListener(this)
-  //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
-        mEdRead = findViewById<View>(R.id.ed_read) as TextView                  // kawa TextView に変更
 
- //       mEdWrite = findViewById<View>(R.id.ed_write) as EditText
+  //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
+        mEdRead = findViewById<View>(R.id.ed_read) as TextView                  // kawa EditからTextView に変更
+
+ //       mEdWrite = findViewById<View>(R.id.ed_write) as EditText          // 送信することはないのでマスクする
         mService = BluetoothService.getDefaultInstance()
         mWriter = BluetoothWriter(mService)
 
@@ -151,19 +171,21 @@ import kotlin.experimental.and
      //   val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
      //   inputMethodManager.hideSoftInputFromWindow(mEdWrite?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
 
-        // ボタンをタッチすると、MainActivityの画面に戻る
+        /* --------------------------------------------------
+           ボタンをタッチすると、MainActivityの画面に戻る
+           MainActivityでX軸の幅を設定するようにした
+         ---------------------------------------------------- */
         val btn1: Button = findViewById(R.id.monitor_btn)
             btn1.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+    }       // onCreat()ここまで
 
-
-
-
-
-    }
-
+    /* -------------------------------------------------------------
+    この画面で、X軸の幅を設定するときは、ここを使う
+    いまは、ドロワーを出そうとすると停止するのでマスク
+    ----------------------------------------------------------------- */
 /*
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
@@ -196,13 +218,9 @@ import kotlin.experimental.and
     }
 
 
-
-
-
-
-
-
-    // ------------------------------------ kawa2 -----------------
+    /*  ------------------------------------ kawa2 -----------------
+    チャートの初期設定、MPAndroidChartSampleから流用
+    ----------------------------------------------------------------- */
 
     private fun initChart() {
         // no description text
@@ -230,35 +248,20 @@ import kotlin.experimental.and
         // add empty data
         mChart?.setData(data)
 
-
-
         //  ラインの凡例の設定
         val l = mChart?.getLegend()
-        l?.form = Legend.LegendForm.LINE
+        l?.form = Legend.LegendForm.LINE        // 凡例を線で表す
         l?.textColor = Color.BLACK
 
         val xl = mChart?.getXAxis()
         xl?.textColor = Color.BLACK
         xl?.setLabelsToSkip(9)
 
-        //
-
-
-    //    xl?.setAxisMaxValue( 12500.0f)
-    //    xl?.setAxisMinValue(0f)
         xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
-
-  //      mChart?.setVisibleXRangeMaximum(12500f)
-
-   //     mChart?.notifyDataSetChanged()
-  //      mChart?.invalidate()
-
 
         val leftAxis = mChart?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
-    //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
-    //    leftAxis?.axisMinValue = -3.0f
-        leftAxis?.setAxisMaxValue( 5000.0f)
+        leftAxis?.setAxisMaxValue( 5000.0f)             // Y軸の最大、最小
         leftAxis?.setAxisMinValue(-3.0f)
 
    //     leftAxis?.setStartAtZero(false)
@@ -302,21 +305,15 @@ import kotlin.experimental.and
 
         xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
 
-        // kawa5
-     //   xl?.setAxisMaxValue( 12500.0f)
-     //   xl?.setAxisMinValue(0f)
-
-        mChart2?.notifyDataSetChanged()
-        mChart2?.invalidate()
-
-
-
         val leftAxis = mChart2?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
-        //    leftAxis?.axisMaxValue = 5000.0f                // kawa2
-        //    leftAxis?.axisMinValue = -3.0f
-        leftAxis?.setAxisMaxValue( 100.0f)
-        leftAxis?.setAxisMinValue(-10.0f)
+
+     //   leftAxis?.setAxisMaxValue( 100.0f)
+     //   leftAxis?.setAxisMinValue(-10.0f)
+
+        leftAxis?.setAxisMaxValue( 20.0f)
+        leftAxis?.setAxisMinValue(0.0f)
+
 
         //     leftAxis?.setStartAtZero(false)
         leftAxis?.setDrawGridLines(true)
@@ -329,8 +326,9 @@ import kotlin.experimental.and
 
 
 
-// ----------------------------------------------------------------------------
+/*  ----------------------------------------------------------------------------
     // ここが受信データが入ったときに実行される関数、この中で処理する
+ ------------------------------------------------------------------------------- */
     override fun onDataRead(buffer: ByteArray, length: Int) {
       //  Log.d(TAG, "onDataRead: " + String(buffer, 0, length))      // これはAndroid Studio に出す分
  //   Log.d(TAG, "onDataRead: " + buffer.contentToString())       // これはLogで10進数が出る
@@ -366,8 +364,6 @@ import kotlin.experimental.and
 
 
         if (set1 == null) {
-
-
   //      set1 = createSet()
   //      set2 = createSet()
             set1 = LineDataSet(null, "データ1")
@@ -387,7 +383,13 @@ import kotlin.experimental.and
 
         if (set3 == null) {
             set3 = LineDataSet(null, "データ3")        // kawa3
-            set3.color = Color.GREEN
+        //   set3.color = Color.GREEN                      // 緑
+        //    set3.color = Color.BLACK
+            //      set3.color = Color.MAGENTA                  // 桃色
+      //      set3.color = Color.CYAN                     // 空色 //
+            //      set3.color = Color.parseColor("#008577")        // 濃い緑
+            set3.color = Color.parseColor("#d2691e")    //チョコレート色
+
             set3.setDrawValues(false)
             set3.setDrawCircles(false)
             data2.addDataSet(set3)
@@ -399,40 +401,45 @@ import kotlin.experimental.and
         data.addXValue(format.format(date))
         data2.addXValue(format.format(date))
 
-        var fvalue1 = 9999f
-        var fvalue2 = 9999f
-        var fvalue3 = 9999f
+    // 初期値を設定しておく
+        var fvalue1 = 5000f
+        var fvalue2 = 5000f
+        var fvalue3 = 4500f
         var workBuffer = ByteArray(80)
 
-     //   var j = 0
-
-
-        var tmpOffset = 0
+       var tmpOffset = 0
         val ll = buffer.size
 
+/* -----------------------------------------------------------
+   下2ビットが00までのオフセットを求める
+   tmpOffsetにいれて、画面上面に表示する
+   ----------------------------------------------------------- */
 
-   // 最初の1回目、下2ビットが00までのオフセットを求める
-//   if( offset == 9999) {
        for (i in 0..10) {
            // 連続した2バイトの下2ビットが00
+           tmpOffset++
            if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
-               offset = 5- (i % 5)
-               tmpOffset = i
-            //   Log.d(TAG, "onDataRead: " + tmpOffset)
-               mEdRead!!.setText(tmpOffset.toString())
-               if((tmpOffset == 5) or (tmpOffset == 0)) {
-                   offset = 0
-               }
+           //    offset = 5- (i % 5)
+           //    tmpOffset = i
+
+            //   if((tmpOffset == 5) or (tmpOffset == 0)) {
+            //       offset = 0
+            //   }
                break
            }
        }
-    /*
+    tmpOffset--
+    Log.d(TAG, "onDataRead: " + tmpOffset)
+    mEdRead!!.setText(tmpOffset.toString())             // オフセットを画面に出す
+
+
+
+    /* --------------------------------------------------------------
        if(tmpOffset > 0) {
            for (k in 0..(tmpOffset - 1)) {
                buffer[k] = 0x02.toByte()
            }
        }
- //  }
 
      // workBufferに入れる
     if(offset > 0) {
@@ -454,30 +461,57 @@ import kotlin.experimental.and
             restBuffer[k] = buffer[ll - offset + k]
         }
     }
+----------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------------
+ 連続して、00 00 01 01 の並びの時に値を抽出する。
+     12bitでマスクする。
+-------------------------------------------------------------------------------- */
+
+
+    for (i in 0..10) {                        // データが10個なら0と1
+        // 連続した2バイトの下2ビットが00
+        if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i+1] and (0x03)) == 0x00.toByte())
+        and ((buffer[i+2] and (0x03)) == 0x01.toByte()) and ((buffer[i+3] and (0x03)) == 0x01.toByte())) {
+
+            var v = buffer[i + 1].toInt() and (0xFC)
+            var u = buffer[i].toInt() and (0xFC)
+            var nn = u.shl(4) + v.ushr(2)
+        //    nn = nn and (0xFFF)                               // ここのマスクはあってもなくてもい
+            fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
+
+
+             v = buffer[i+3].toInt() and (0xFC)
+             u = buffer[i+2].toInt() and (0xFC)
+             nn = u.shl(4) + v.ushr(2)
+       //     nn = nn and (0xFFF)
+            fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
+
+            break
+        }
+    }
+
+// 下2ビットが一致しなかったとき、データを出力する
+    /*
+if (fvalue1 > 4500f) {
+    mEdRead!!.setText(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()), TextView.BufferType.NORMAL)
+}
 */
 
-
-         for (i in 0..15) {                        // データが10個なら0と1
+/*
+         for (i in 0..10) {                        // データが10個なら0と1
              // 連続した2バイトの下2ビットが00
              if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
                  var v = buffer[i + 1].toInt() and (0xFC)
                  var u = buffer[i].toInt() and (0xFC)
                  var nn = u.shl(4) + v.ushr(2)
 
-                 //   if (tmpOffset == prevVer) {
                  fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
                  break
-                 //        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-                 //   }
-                 prevVer = tmpOffset
-
-                 //    Log.d(TAG, "onDataRead: " + nn)
-                 //    Log.d(TAG, "onDataRead: " + tmpOffset)
-                 //  mEdRead!!.setText(nn.toString())
              }
          }
 
-         for (i in 0..15) {
+         for (i in 0..10) {
              // 連続した2バイトの下2ビットが01
              if (((buffer[i] and (0x03)) == 0x01.toByte()) and ((buffer[i + 1] and (0x03)) == 0x01.toByte())) {
                  var v = buffer[i + 1].toInt() and (0xFC)
@@ -485,12 +519,14 @@ import kotlin.experimental.and
                  var nn = u.shl(4) + v.ushr(2)
                  fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
                  break
-                 //    fvalue2 = fvalue2 * 2
              }
          }
+*/
 
 
-         for (i in 0..15) {
+
+/*
+         for (i in 0..10) {
              // 1バイトの下2ビットが11
              if ((buffer[i] and (0x03)) == 0x03.toByte()) {
                  var u = buffer[i].toInt() and (0xFC)
@@ -498,13 +534,14 @@ import kotlin.experimental.and
                  fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
                  break
              }
-
          }
+*/
+    fvalue3 = tmpOffset.toFloat()          // 00 00 のオフセットを出力する
 
 
-// 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
-
-         if (fvalue2 <= 4095) {
+        // 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
+        // ただし、サンプル1回分抜けるので、よく見ると段差が見える
+  //       if (fvalue2 <= 4095) {
              data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
              data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
              data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
@@ -513,46 +550,31 @@ import kotlin.experimental.and
              //   data.notifyDataChanged()
              mChart?.notifyDataSetChanged()
              mChart?.setVisibleXRangeMaximum(xLenght)
-             mChart?.setVisibleXRangeMinimum(xLenght)
+             mChart?.setVisibleXRangeMinimum(xLenght)           // 最小値を最大値と同じにすると軸が固定
        //      mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
-        //     mChart?.moveViewToX(0f)
 
-             // kawa3
-             //     data2.notifyDataChanged()
              mChart2?.notifyDataSetChanged()
              mChart2?.setVisibleXRangeMaximum(xLenght)
              mChart2?.setVisibleXRangeMinimum(xLenght)
 
-
+            // X軸を固定したときの画像の移動方法
+            // 軸いっぱいに達するまでは単に更新する。それ以降の時は移動させる
              if (loopCount < xLenght) {
-                 mChart?.invalidate()
+                 mChart?.invalidate()               // 更新する
                  mChart2?.invalidate()
              }else {
                  mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
                  mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
                  loopCount = xLenght
              }
-
-         //    mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
-
-
-             loopCount++
-         }
-
-   //  }
+             loopCount++                // 描き始めに軸に達するまでをカウントする
+  //       }
 
 
-    // j++
-
-
-   // }   // end of for
-
-
-
-
-
-
-
+/* ----------------------------------------------------------------------------
+        ここから下は、試行錯誤した残り
+        何をやったか残すため、コメントあるとしたままにしておく
+-------------------------------------------------------------------------------- */
 
 /*
         for( i in 0..ll-2 ){
@@ -663,6 +685,9 @@ import kotlin.experimental.and
 
 
     }   // end of onDataRead()
+
+
+
 
 
 // -----------------------------------------------------------------
