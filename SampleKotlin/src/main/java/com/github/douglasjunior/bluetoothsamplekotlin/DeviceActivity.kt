@@ -48,6 +48,7 @@ import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothWriter
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import java.lang.Math.abs
@@ -80,6 +81,10 @@ import kotlin.experimental.and
 
     private var xLenght = 1000f
     private var loopCount = 1f
+
+    // 不連続時に1回前の値を代用するために、保存しておくための変数
+    private var prevf1 = 0f
+    private var prevf2 = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -264,6 +269,22 @@ import kotlin.experimental.and
         leftAxis?.setAxisMaxValue( 5000.0f)             // Y軸の最大、最小
         leftAxis?.setAxisMinValue(-3.0f)
 
+        // リミットラインを入れる
+     //   leftAxis?.setDrawLimitLinesBehindData(true)           // グラフの線の後ろにするとき
+        val ll = LimitLine(1000f,"lower")
+        ll.lineColor = Color.parseColor("#008577")        // 濃い緑
+        ll.lineWidth = 2f
+        ll.textColor = Color.BLACK
+        ll.textSize = 30f
+        leftAxis?.addLimitLine(ll)
+
+        val uu = LimitLine(3500f,"upper")
+        uu.lineColor = Color.CYAN                   // 空色
+        uu.lineWidth = 2f
+        uu.textColor = Color.BLACK
+        uu.textSize = 30f
+        leftAxis?.addLimitLine(uu)
+
    //     leftAxis?.setStartAtZero(false)
         leftAxis?.setDrawGridLines(true)
         val rightAxis = mChart?.getAxisRight()
@@ -311,9 +332,13 @@ import kotlin.experimental.and
      //   leftAxis?.setAxisMaxValue( 100.0f)
      //   leftAxis?.setAxisMinValue(-10.0f)
 
-        leftAxis?.setAxisMaxValue( 20.0f)
-        leftAxis?.setAxisMinValue(0.0f)
+        // Y軸の幅を明示的に1.0にする
+        leftAxis?.setLabelCount(6,true)         // Y軸のラベルを6個
+        leftAxis?.setGranularity(1.0f)                           // 間隔は1.0
 
+        leftAxis?.setAxisMaxValue( 5.0f)
+        leftAxis?.setAxisMinValue(0.0f)
+        leftAxis?.setShowOnlyMinMax(true)
 
         //     leftAxis?.setStartAtZero(false)
         leftAxis?.setDrawGridLines(true)
@@ -430,7 +455,7 @@ import kotlin.experimental.and
        }
     tmpOffset--
     Log.d(TAG, "onDataRead: " + tmpOffset)
-    mEdRead!!.setText(tmpOffset.toString())             // オフセットを画面に出す
+//    mEdRead!!.setText(tmpOffset.toString())             // オフセットを画面に出す
 
 
 
@@ -491,6 +516,9 @@ import kotlin.experimental.and
         }
     }
 
+
+
+
 // 下2ビットが一致しなかったとき、データを出力する
     /*
 if (fvalue1 > 4500f) {
@@ -541,7 +569,22 @@ if (fvalue1 > 4500f) {
 
         // 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
         // ただし、サンプル1回分抜けるので、よく見ると段差が見える
-  //       if (fvalue2 <= 4095) {
+
+    // 不連続、初期値の時は1回前の値を使い描画は毎サンプル行う
+         if (fvalue2 > 4095) {
+             fvalue1 = prevf1
+             fvalue2 = prevf2
+
+             for (i in 0..10) {
+                 //   mEdRead!!.setText(buffer[i].toString())
+                 mEdRead!!.append(buffer[i].toString())
+                 //   mEdRead!!.append(buffer.toString())
+             }
+
+         }
+
+
+
              data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
              data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
              data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
@@ -568,7 +611,10 @@ if (fvalue1 > 4500f) {
                  loopCount = xLenght
              }
              loopCount++                // 描き始めに軸に達するまでをカウントする
-  //       }
+
+// 今回のデータを次回のために保存する
+        prevf1 = fvalue1
+        prevf2 = fvalue2
 
 
 /* ----------------------------------------------------------------------------
