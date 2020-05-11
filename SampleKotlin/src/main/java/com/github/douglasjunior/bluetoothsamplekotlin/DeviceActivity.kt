@@ -86,6 +86,9 @@ import kotlin.experimental.and
     private var prevf1 = 0f
     private var prevf2 = 0f
 
+    // X軸のラベルの間隔
+    private var xIntervalRange = 100
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
@@ -101,41 +104,50 @@ import kotlin.experimental.and
 
 /* ----------------------------------------------------------------------------------------------
          Mainから秒数の設定データをもらう。キーワードがXSECでvaluew1に値が入る
-         この値によって30秒ごとにX軸の幅を設定する。
+         この値によって30秒ごとにX軸の幅を設定する。メニューバーに秒数表示。
  ------------------------------------------------------------------------------------------------- */
                val value1 = intent.getIntExtra("XSEC",1)
 
                if (value1 == 1 ) {
                mToolbar.title = "30sec"
                    xLenght = 1875f
+                   xIntervalRange = 100
                //    xLenght = 187f                 // 試しに幅を 1/10　にするとき
                }
                else if (value1 == 2) {
                    mToolbar.title = "60sec"
                    xLenght = 3750f
+                   xIntervalRange = 200
                }
                else if (value1 == 3) {
                    mToolbar.title = "90sec"
                    xLenght = 5625f
+                   xIntervalRange = 300
                }
                else if (value1 == 4) {
                    mToolbar.title = "120sec"
                    xLenght = 7500f
+                   xIntervalRange = 400
                }
                else if (value1 == 5) {
                    mToolbar.title = "150sec"
                    xLenght = 9375f
+                   xIntervalRange = 500
                }
                else if (value1 == 6) {
+                   mToolbar.title = "180sec"
                    xLenght = 11250f
+                   xIntervalRange = 600
                }
                else if (value1 == 7) {
                    mToolbar.title = "210sec"
                    xLenght = 13125f
+                   xIntervalRange = 700
                }
                else if (value1 == 8) {
-                       mToolbar.title = "15sec"
-                       xLenght = 938f
+                   mToolbar.title = "15sec"
+                   xLenght = 938f
+                   xIntervalRange = 50
                }
         setSupportActionBar(mToolbar)
                /* --------------- kawa2 ---------------------------
@@ -260,9 +272,9 @@ import kotlin.experimental.and
 
         val xl = mChart?.getXAxis()
         xl?.textColor = Color.BLACK
-        xl?.setLabelsToSkip(9)
+        xl?.setLabelsToSkip(xIntervalRange)
 
-        xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
+        xl?.isEnabled = true                   // falseのとき、上のラベルが表示されない
 
         val leftAxis = mChart?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
@@ -271,18 +283,18 @@ import kotlin.experimental.and
 
         // リミットラインを入れる
      //   leftAxis?.setDrawLimitLinesBehindData(true)           // グラフの線の後ろにするとき
-        val ll = LimitLine(1000f,"lower")
+        val ll = LimitLine(750f,"lower")
         ll.lineColor = Color.parseColor("#008577")        // 濃い緑
-        ll.lineWidth = 2f
+        ll.lineWidth = 1f
         ll.textColor = Color.BLACK
-        ll.textSize = 30f
+        ll.textSize = 10f
         leftAxis?.addLimitLine(ll)
 
         val uu = LimitLine(3500f,"upper")
         uu.lineColor = Color.CYAN                   // 空色
-        uu.lineWidth = 2f
+        uu.lineWidth = 1f
         uu.textColor = Color.BLACK
-        uu.textSize = 30f
+        uu.textSize = 10f
         leftAxis?.addLimitLine(uu)
 
    //     leftAxis?.setStartAtZero(false)
@@ -322,9 +334,9 @@ import kotlin.experimental.and
         l?.textColor = Color.BLACK
         val xl = mChart2?.getXAxis()
         xl?.textColor = Color.BLACK
-        xl?.setLabelsToSkip(9)
+        xl?.setLabelsToSkip(xIntervalRange)
 
-        xl?.isEnabled = false                   // falseのとき、上のラベルが表示されない
+        xl?.isEnabled = true                   // falseのとき、上のラベルが表示されない
 
         val leftAxis = mChart2?.getAxisLeft()
         leftAxis?.textColor = Color.BLACK
@@ -442,7 +454,7 @@ import kotlin.experimental.and
 
        for (i in 0..10) {
            // 連続した2バイトの下2ビットが00
-           tmpOffset++
+
            if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
            //    offset = 5- (i % 5)
            //    tmpOffset = i
@@ -452,10 +464,11 @@ import kotlin.experimental.and
             //   }
                break
            }
+           tmpOffset++
        }
-    tmpOffset--
+
     Log.d(TAG, "onDataRead: " + tmpOffset)
-//    mEdRead!!.setText(tmpOffset.toString())             // オフセットを画面に出す
+    mEdRead!!.setText(tmpOffset.toString())             // オフセットを画面に出す
 
 
 
@@ -575,11 +588,11 @@ if (fvalue1 > 4500f) {
              fvalue1 = prevf1
              fvalue2 = prevf2
 
-             for (i in 0..10) {
+          //   for (i in 0..10) {
                  //   mEdRead!!.setText(buffer[i].toString())
-                 mEdRead!!.append(buffer[i].toString())
+         //        mEdRead!!.append(buffer[i].toString())
                  //   mEdRead!!.append(buffer.toString())
-             }
+         //    }
 
          }
 
