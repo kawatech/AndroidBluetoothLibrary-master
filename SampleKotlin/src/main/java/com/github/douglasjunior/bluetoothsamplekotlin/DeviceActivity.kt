@@ -258,9 +258,11 @@ import kotlin.experimental.and
 
 
         // set an alternative background color
-        mChart?.setBackgroundColor(Color.LTGRAY)
+     //   mChart?.setBackgroundColor(Color.LTGRAY)
+        mChart?.setBackgroundColor(Color.BLACK)
         val data = LineData()
-        data.setValueTextColor(Color.BLACK)
+     //   data.setValueTextColor(Color.BLACK)
+        data.setValueTextColor(Color.LTGRAY)
 
         // add empty data
         mChart?.setData(data)
@@ -268,21 +270,25 @@ import kotlin.experimental.and
         //  ラインの凡例の設定
         val l = mChart?.getLegend()
         l?.form = Legend.LegendForm.LINE        // 凡例を線で表す
-        l?.textColor = Color.BLACK
+    //    l?.textColor = Color.BLACK
+        l?.textColor = Color.LTGRAY
 
         val xl = mChart?.getXAxis()
-        xl?.textColor = Color.BLACK
+     //   xl?.textColor = Color.BLACK
+        xl?.textColor = Color.LTGRAY
         xl?.setLabelsToSkip(xIntervalRange)
 
         xl?.isEnabled = true                   // falseのとき、上のラベルが表示されない
 
         val leftAxis = mChart?.getAxisLeft()
-        leftAxis?.textColor = Color.BLACK
+     //   leftAxis?.textColor = Color.BLACK
+        leftAxis?.textColor = Color.LTGRAY
         leftAxis?.setAxisMaxValue( 5000.0f)             // Y軸の最大、最小
         leftAxis?.setAxisMinValue(-3.0f)
 
-        // リミットラインを入れる
+        // リミットラインを入れる、やめる
      //   leftAxis?.setDrawLimitLinesBehindData(true)           // グラフの線の後ろにするとき
+        /* -----------------------------------------
         val ll = LimitLine(750f,"lower")
         ll.lineColor = Color.parseColor("#008577")        // 濃い緑
         ll.lineWidth = 1f
@@ -296,6 +302,7 @@ import kotlin.experimental.and
         uu.textColor = Color.BLACK
         uu.textSize = 10f
         leftAxis?.addLimitLine(uu)
+    ------------------------------------------------------------- */
 
    //     leftAxis?.setStartAtZero(false)
         leftAxis?.setDrawGridLines(true)
@@ -321,9 +328,11 @@ import kotlin.experimental.and
         mChart2?.setPinchZoom(true)
 
         // set an alternative background color
-        mChart2?.setBackgroundColor(Color.LTGRAY)
+     //   mChart2?.setBackgroundColor(Color.LTGRAY)
+        mChart2?.setBackgroundColor(Color.BLACK)
         val data2 = LineData()                      // kawa2
-        data2.setValueTextColor(Color.BLACK)
+     //   data2.setValueTextColor(Color.BLACK)
+        data2.setValueTextColor(Color.LTGRAY)
 
         // add empty data
         mChart2?.setData(data2)
@@ -331,15 +340,18 @@ import kotlin.experimental.and
         //  ラインの凡例の設定
         val l = mChart2?.getLegend()
         l?.form = Legend.LegendForm.LINE
-        l?.textColor = Color.BLACK
+     //   l?.textColor = Color.BLACK
+        l?.textColor = Color.LTGRAY
         val xl = mChart2?.getXAxis()
-        xl?.textColor = Color.BLACK
+     //   xl?.textColor = Color.BLACK
+        xl?.textColor = Color.LTGRAY
         xl?.setLabelsToSkip(xIntervalRange)
 
         xl?.isEnabled = true                   // falseのとき、上のラベルが表示されない
 
         val leftAxis = mChart2?.getAxisLeft()
-        leftAxis?.textColor = Color.BLACK
+    //    leftAxis?.textColor = Color.BLACK
+        leftAxis?.textColor = Color.LTGRAY
 
      //   leftAxis?.setAxisMaxValue( 100.0f)
      //   leftAxis?.setAxisMinValue(-10.0f)
@@ -404,7 +416,8 @@ import kotlin.experimental.and
   //      set1 = createSet()
   //      set2 = createSet()
             set1 = LineDataSet(null, "データ1")
-            set1.color = Color.BLUE
+         //   set1.color = Color.BLUE
+            set1.color = Color.YELLOW
             set1.setDrawValues(false)
             set1.setDrawCircles(false)          // データの頂点の丸を描画しない
             data.addDataSet(set1)
@@ -412,7 +425,9 @@ import kotlin.experimental.and
 
         if (set2 == null) {
             set2 = LineDataSet(null, "データ2")
-            set2.color = Color.RED
+        //    set2.color = Color.RED
+        //    set2.color = Color.GREEN
+            set2.color = Color.parseColor("#00FF5F")            // 鮮やかな緑
             set2.setDrawValues(false)
             set2.setDrawCircles(false)
             data.addDataSet(set2)  /////
@@ -425,8 +440,8 @@ import kotlin.experimental.and
             //      set3.color = Color.MAGENTA                  // 桃色
       //      set3.color = Color.CYAN                     // 空色 //
             //      set3.color = Color.parseColor("#008577")        // 濃い緑
-            set3.color = Color.parseColor("#d2691e")    //チョコレート色
-
+         //   set3.color = Color.parseColor("#d2691e")    //チョコレート色
+            set3.color = Color.YELLOW
             set3.setDrawValues(false)
             set3.setDrawCircles(false)
             data2.addDataSet(set3)
