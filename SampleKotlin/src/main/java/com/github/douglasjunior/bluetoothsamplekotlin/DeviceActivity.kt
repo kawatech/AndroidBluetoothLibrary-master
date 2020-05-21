@@ -34,6 +34,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -106,46 +107,63 @@ import kotlin.experimental.and
          Mainから秒数の設定データをもらう。キーワードがXSECでvaluew1に値が入る
          この値によって30秒ごとにX軸の幅を設定する。メニューバーに秒数表示。
  ------------------------------------------------------------------------------------------------- */
-               val value1 = intent.getIntExtra("XSEC",1)
+                val value1 = intent.getIntExtra("XSEC",1)
+
+                val dm = DisplayMetrics()
+                getWindowManager().getDefaultDisplay().getMetrics(dm)
+                var winW = (dm.widthPixels )
+                var winH = dm.heightPixels
+                var wLong = 1
+                if(winW > winH) {
+                    wLong = winW
+                }
+                else {
+                    wLong = winH
+                }
+                wLong = (wLong - 625) / 8
+                var stmp = ""
+                for (i in 0..wLong) {
+                    stmp = stmp + " "
+                }
 
                if (value1 == 1 ) {
-               mToolbar.title = "30sec"
+                    mToolbar.title = "Losteaka Oscilloscope 30sec " + stmp + "ロステーカ株式会社"
                    xLenght = 1875f
                    xIntervalRange = 100
                //    xLenght = 187f                 // 試しに幅を 1/10　にするとき
                }
                else if (value1 == 2) {
-                   mToolbar.title = "60sec"
+                   mToolbar.title = "Losteaka Oscilloscope 60sec " + stmp + "ロステーカ株式会社"
                    xLenght = 3750f
                    xIntervalRange = 200
                }
                else if (value1 == 3) {
-                   mToolbar.title = "90sec"
+                   mToolbar.title = "Losteaka Oscilloscope 90sec " + stmp + "ロステーカ株式会社"
                    xLenght = 5625f
                    xIntervalRange = 300
                }
                else if (value1 == 4) {
-                   mToolbar.title = "120sec"
+                   mToolbar.title = "Losteaka Oscilloscope 120sec" + stmp + "ロステーカ株式会社"
                    xLenght = 7500f
                    xIntervalRange = 400
                }
                else if (value1 == 5) {
-                   mToolbar.title = "150sec"
+                   mToolbar.title = "Losteaka Oscilloscope 150sec" + stmp + "ロステーカ株式会社"
                    xLenght = 9375f
                    xIntervalRange = 500
                }
                else if (value1 == 6) {
-                   mToolbar.title = "180sec"
+                   mToolbar.title = "Losteaka Oscilloscope 180sec" + stmp + "ロステーカ株式会社"
                    xLenght = 11250f
                    xIntervalRange = 600
                }
                else if (value1 == 7) {
-                   mToolbar.title = "210sec"
+                   mToolbar.title = "Losteaka Oscilloscope 210sec" + stmp + "ロステーカ株式会社"
                    xLenght = 13125f
                    xIntervalRange = 700
                }
                else if (value1 == 8) {
-                   mToolbar.title = "15sec"
+                   mToolbar.title = "Losteaka Oscilloscope 15sec " + stmp + "ロステーカ株式会社"
                    xLenght = 938f
                    xIntervalRange = 50
                }

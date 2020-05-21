@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Sample Kotlin</string>
+    <string name="app_name">LoScope</string>
     <string name="action_scan">SCAN</string>
     <string name="action_stop">STOP</string>
     <string name="activity_device">Device</string>

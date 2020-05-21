@@ -24,17 +24,19 @@
 
 package com.github.douglasjunior.bluetoothsamplekotlin;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothService;
-import com.wpx.util.WPXUtils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by douglas on 26/05/17.
@@ -42,9 +44,9 @@ import com.wpx.util.WPXUtils;
 
 public class BitmapActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FloatingActionButton mFab;
+//    private FloatingActionButton mFab;
     private ImageView mImgOriginal;
-    private ImageView mImgBlackWhite;
+//    private ImageView mImgBlackWhite;
 
     private BluetoothService mService;
 
@@ -55,21 +57,27 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_bitmap);
+
+        setTitle("Losteaka Oscilloscope");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    //    setSupportActionBar("Losteaka Oscilloscope");
 
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setOnClickListener(this);
+
+        // FloatingActionButtonは削除、xmlからも削除
+  //      mFab = (FloatingActionButton) findViewById(R.id.fab);
+  //      mFab.setOnClickListener(this);
 
         mService = BluetoothService.getDefaultInstance();
 
         mImgOriginal = (ImageView) findViewById(R.id.img_original);
-        mImgBlackWhite = (ImageView) findViewById(R.id.img_blackwhite);
+  //      mImgBlackWhite = (ImageView) findViewById(R.id.img_blackwhite);
 
         new Thread() {
             @Override
             public void run() {
-                final Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.bmw);
+        //        final Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.bmw);
+                final Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.losteaka);     // Losteakaのロゴ
 
                 final Bitmap resized = Bitmap.createScaledBitmap(original, 255, 255, false);
 
@@ -85,11 +93,37 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void run() {
                         mImgOriginal.setImageBitmap(original);
-                        mImgBlackWhite.setImageBitmap(editedGray);
+                //        mImgBlackWhite.setImageBitmap(editedGray);
                     }
                 });
             }
         }.start();
+
+        // 2秒で前の画面に戻るが、また繰り返す
+        /* ----------------------------------------*/
+        TimerTask task = new TimerTask() {
+            public void run() {
+
+                Intent intent = new Intent( BitmapActivity.this, MainActivity.class );
+                intent.putExtra("Los", 1);
+                startActivity( intent );
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(task, 2000);
+
+      /*--------------------------------------------------   */
+/*
+        try {
+            Thread.sleep(2000);
+            Intent intent = new Intent( BitmapActivity.this, MainActivity.class );
+            startActivity( intent );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
+
     }
 
     @Override
@@ -98,8 +132,17 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void run() {
                 try {
-                    byte[] bytes = WPXUtils.decodeBitmap(imageBitmap);
-                    mService.write(bytes);
+                //    byte[] bytes = WPXUtils.decodeBitmap(imageBitmap);
+                 //   mService.write(bytes);
+
+
+                    // 遷移先のActivityを指定して、Intentを作成する
+                    Intent intent = new Intent( BitmapActivity.this, MainActivity.class );
+
+                    // 遷移先のアクティビティを起動させる
+                    startActivity( intent );
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -39,6 +39,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -85,8 +86,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   //      val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
  //       setSupportActionBar(toolbar)
 
+        // 画面サイズを読みだして、長い方をwLongにいれる
+        // 中央のスペースの数を適切な幅になるように計算する
+        val dm = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(dm)
+        var winW = (dm.widthPixels )
+        var winH = dm.heightPixels
+        var wLong = 1
+        if(winW > winH) {
+            wLong = winW
+        }
+        else {
+            wLong = winH
+        }
 
-
+        // 画面の長い方のサイズから間に入れるスペースを計算する
+        wLong = (wLong - 840) / 7
+        var stmp = ""
+        for (i in 0..wLong) {
+            stmp = stmp + " "
+        }
+        setTitle("Losteaka Oscilloscope" + stmp + "ロステーカ株式会社")
 
         // kawa Drawer
         mToolbar = findViewById(R.id.toolbar)
@@ -102,6 +122,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
 
+        val los1 = intent.getIntExtra("Los",0)
+    // losteakaのロゴを表示する
+        if (los1 == 0) {
+            startActivity(Intent(this@MainActivity, BitmapActivity::class.java))
+        }
 
 
         //--------------- kawa2 ---------------------------
@@ -161,7 +186,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else if (id == R.id.nav_15s) {
             mToolbar.title = "15sec"
             mGenre = 8
-    }
+        }
      //   intent.putExtra("XSEC", mGenre)             // データを渡す
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -253,8 +278,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             builder.show()
         }
             // kawa4 画像の選択はマスクした
-            /*
+/*
             val colors = arrayOf<CharSequence>("Try text", "Try picture")
+
 
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Select")
@@ -267,7 +293,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             builder.setCancelable(false)
             builder.show()
-        } */
+         */
 
     }
 
