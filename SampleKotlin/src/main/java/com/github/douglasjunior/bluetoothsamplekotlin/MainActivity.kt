@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var winW = (dm.widthPixels )
         var winH = dm.heightPixels
         var wLong = 1
+
         if(winW > winH) {
             wLong = winW
         }
@@ -121,9 +122,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
+  //      val intent2 = Intent(this@MainActivity, BitmapActivity::class.java)
+        //      intent2.putExtra("HOLIZON", Holiz)                      // 横長の時は1
 
         val los1 = intent.getIntExtra("Los",0)
-    // losteakaのロゴを表示する
+
+        // losteakaのロゴを表示する
         if (los1 == 0) {
             startActivity(Intent(this@MainActivity, BitmapActivity::class.java))
         }

@@ -23,22 +23,14 @@
  */
 package com.github.douglasjunior.bluetoothsamplekotlin
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -46,14 +38,11 @@ import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothService
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothService.OnBluetoothEventCallback
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothStatus
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothWriter
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.LimitLine
-import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import java.lang.Math.abs
-import java.nio.ByteBuffer
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -213,6 +202,7 @@ import kotlin.experimental.and
         val btn1: Button = findViewById(R.id.monitor_btn)
             btn1.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("Los", 2)
             startActivity(intent)
         }
     }       // onCreat()ここまで

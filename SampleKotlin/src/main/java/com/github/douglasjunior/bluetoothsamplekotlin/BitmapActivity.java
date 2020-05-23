@@ -27,9 +27,9 @@ package com.github.douglasjunior.bluetoothsamplekotlin;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -52,15 +52,18 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
 
     private Bitmap imageBitmap;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_bitmap);
 
+        /*
         setTitle("Losteaka Oscilloscope");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        */
     //    setSupportActionBar("Losteaka Oscilloscope");
 
 
@@ -73,12 +76,14 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         mImgOriginal = (ImageView) findViewById(R.id.img_original);
   //      mImgBlackWhite = (ImageView) findViewById(R.id.img_blackwhite);
 
+
+
         new Thread() {
             @Override
             public void run() {
         //        final Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.bmw);
                 final Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.losteaka);     // Losteakaのロゴ
-
+/*
                 final Bitmap resized = Bitmap.createScaledBitmap(original, 255, 255, false);
 
                 final Bitmap editedBrightness = BitmapHelper.changeBitmapContrastBrightness(resized, 1, 50);
@@ -88,30 +93,77 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 imageBitmap = editedBrightness;
 
                 final Bitmap editedGray = BitmapHelper.changeBitmapBlackWhite(editedBrightness);
+*/
+                // 画像の横、縦サイズを取得
+                int imageWidth = original.getWidth();
+                int imageHeight = original.getHeight();
+                // Matrix インスタンス生成
+                Matrix matrix = new Matrix();
+
+
+                //　別な方法で画面の向きを取得する。これもうまくいかない
+                /* ----------------------------------
+                Resources resources = getResources();
+                Configuration config = resources.getConfiguration();
+                switch(config.orientation) {
+                    case Configuration.ORIENTATION_PORTRAIT:        // 縦
+                        matrix.setRotate(0, imageWidth / 2, imageHeight / 2);
+                     break;
+                    case Configuration.ORIENTATION_LANDSCAPE:        // 横
+                         matrix.setRotate(90, imageWidth / 2, imageHeight / 2);
+                    break;
+                }
+      ------------------- */
+
+                // 仕方がないので、横向きに固定する。
+                matrix.setRotate(90, imageWidth / 2, imageHeight / 2);
+/*
+                // 画像中心を基点に90度回転、実行はできるが検出はされないぞ
+                // 横向きの場合
+                // 端末の向きを取得
+                int orientation = getResources().getConfiguration().orientation;
+             //   if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    matrix.setRotate(90, imageWidth / 2, imageHeight / 2);
+                }
+                else {
+                    matrix.setRotate(0, imageWidth / 2, imageHeight / 2);
+                }
+*/
+                // 90度回転したBitmap画像を生成
+        final        Bitmap bitmap2 = Bitmap.createBitmap(original, 0, 0,
+                        imageWidth, imageHeight, matrix, true);
+
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mImgOriginal.setImageBitmap(original);
-                //        mImgBlackWhite.setImageBitmap(editedGray);
+                  //      mImgOriginal.setImageBitmap(original);
+                        mImgOriginal.setImageBitmap(bitmap2);
+
+
+                  //      mImgBlackWhite.setImageBitmap(editedGray);
+
                     }
                 });
             }
         }.start();
 
-        // 2秒で前の画面に戻るが、また繰り返す
+        // 2秒で前の画面に戻るが、また繰り返す。Losで1を返す、これでスルーさせる
         /* ----------------------------------------*/
         TimerTask task = new TimerTask() {
             public void run() {
 
+         //       Intent intent2 = new Intent( BitmapActivity.this, MainActivity.class );
+
                 Intent intent = new Intent( BitmapActivity.this, MainActivity.class );
-                intent.putExtra("Los", 1);
+                intent.putExtra("Los", 1);              // 戻るときにLosに１を入れる
                 startActivity( intent );
             }
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, 2000);
+        timer.schedule(task, 2500);
 
       /*--------------------------------------------------   */
 /*

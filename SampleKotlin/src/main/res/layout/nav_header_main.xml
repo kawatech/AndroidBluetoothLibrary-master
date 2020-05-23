@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="表示時間選択"
+        android:text="TIME SPAN"
         android:textColor="@color/colorButtonText"/>
 
 </LinearLayout>
