@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/img_original"
-                android:layout_width="500dp"
-                android:layout_height="500dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="#FFFFFF"
                 android:gravity="center"
                 android:layout_weight="1"

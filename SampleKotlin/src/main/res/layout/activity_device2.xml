@@ -39,37 +39,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/monitor_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="BACK" />
-
-            <TextView
-                android:id="@+id/ed_read"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="top"
-                android:background="#fff"
-                android:focusable="false"
-                android:inputType="none" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/debug_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="DEBUG"
-                android:layout_gravity="right"/>
+                <Button
+                    android:id="@+id/monitor_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="BACK" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/ed_read"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:background="#fff"
+                    android:focusable="false"
+                    android:inputType="none" />
+
+                <Button
+                    android:id="@+id/normal_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="NORMAL"
+                    android:layout_gravity="right"/>
+
+            </LinearLayout>
 
 
 
@@ -86,8 +86,7 @@
                 android:id="@+id/chart2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10" />
-
+                android:layout_weight="15" />
 
 
 

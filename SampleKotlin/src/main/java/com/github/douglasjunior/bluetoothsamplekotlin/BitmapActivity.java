@@ -27,7 +27,6 @@ package com.github.douglasjunior.bluetoothsamplekotlin;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -64,6 +63,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         */
+    // メニューバーにタイトル表示はやめる
     //    setSupportActionBar("Losteaka Oscilloscope");
 
 
@@ -95,11 +95,12 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 final Bitmap editedGray = BitmapHelper.changeBitmapBlackWhite(editedBrightness);
 */
                 // 画像の横、縦サイズを取得
+                /*
                 int imageWidth = original.getWidth();
                 int imageHeight = original.getHeight();
                 // Matrix インスタンス生成
                 Matrix matrix = new Matrix();
-
+*/
 
                 //　別な方法で画面の向きを取得する。これもうまくいかない
                 /* ----------------------------------
@@ -116,11 +117,13 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
       ------------------- */
 
                 // 仕方がないので、横向きに固定する。
-                matrix.setRotate(90, imageWidth / 2, imageHeight / 2);
+
 /*
                 // 画像中心を基点に90度回転、実行はできるが検出はされないぞ
                 // 横向きの場合
                 // 端末の向きを取得
+                // AndroidManifest.xml でandroid:screenOrientation="landscape"にして
+                // そのままで横向きに固定する。よって、matrixでの回転はしない。
                 int orientation = getResources().getConfiguration().orientation;
              //   if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -129,17 +132,17 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 else {
                     matrix.setRotate(0, imageWidth / 2, imageHeight / 2);
                 }
-*/
-                // 90度回転したBitmap画像を生成
-        final        Bitmap bitmap2 = Bitmap.createBitmap(original, 0, 0,
-                        imageWidth, imageHeight, matrix, true);
 
+                // 90度回転したBitmap画像を生成
+  //      final        Bitmap bitmap2 = Bitmap.createBitmap(original, 0, 0,
+  //                      imageWidth, imageHeight, matrix, true);
+*/
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                  //      mImgOriginal.setImageBitmap(original);
-                        mImgOriginal.setImageBitmap(bitmap2);
+                        mImgOriginal.setImageBitmap(original);
+                  //      mImgOriginal.setImageBitmap(bitmap2);             // 回転した画像は表示しない
 
 
                   //      mImgBlackWhite.setImageBitmap(editedGray);
@@ -163,7 +166,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, 2500);
+        timer.schedule(task, 2000);             // 2秒待つ
 
       /*--------------------------------------------------   */
 /*

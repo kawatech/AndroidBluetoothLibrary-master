@@ -102,7 +102,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // 画面の長い方のサイズから間に入れるスペースを計算する
-        wLong = (wLong - 840) / 7
+    //    wLong = (wLong - 840) / 7
+        wLong = (wLong - 600) / 22          //  全部入るのはこれ
+
         var stmp = ""
         for (i in 0..wLong) {
             stmp = stmp + " "
@@ -274,6 +276,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             val builder = AlertDialog.Builder(this)
             // ここで画面を替える
+        //    val intent = Intent(this@MainActivity, DeviceActivity::class.java)
+
+            // 新規の画面の時
             val intent = Intent(this@MainActivity, DeviceActivity::class.java)
 
             intent.putExtra("XSEC", mGenre)             // データを渡す, startAvtivity()の前にやる
