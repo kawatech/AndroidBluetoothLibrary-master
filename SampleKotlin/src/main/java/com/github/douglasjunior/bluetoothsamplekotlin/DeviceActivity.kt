@@ -43,6 +43,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.android.synthetic.main.activity_device.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -85,82 +86,75 @@ import kotlin.experimental.and
 
         // kawa Drawer ここの修正が必要
         //       val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-         //    setSupportActionBar(toolbar)
+        //    setSupportActionBar(toolbar)
 
 
-               // kawa Drawer これがあると停止する
-               mToolbar = findViewById(R.id.toolbar)
+        // kawa Drawer これがあると停止する
+        mToolbar = findViewById(R.id.toolbar)
         //      setSupportActionBar(mToolbar)
 
 /* ----------------------------------------------------------------------------------------------
          Mainから秒数の設定データをもらう。キーワードがXSECでvaluew1に値が入る
          この値によって30秒ごとにX軸の幅を設定する。メニューバーに秒数表示。
  ------------------------------------------------------------------------------------------------- */
-                val value1 = intent.getIntExtra("XSEC",1)
+        val value1 = intent.getIntExtra("XSEC", 1)
 
-                val dm = DisplayMetrics()
-                getWindowManager().getDefaultDisplay().getMetrics(dm)
-                var winW = (dm.widthPixels )
-                var winH = dm.heightPixels
-                var wLong = 1
-                if(winW > winH) {
-                    wLong = winW
-                }
-                else {
-                    wLong = winH
-                }
-                wLong = (wLong - 600) / 22
-                var stmp = ""
-                for (i in 0..wLong) {
-                    stmp = stmp + " "
-                }
+        val dm = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(dm)
+        var winW = (dm.widthPixels)
+        var winH = dm.heightPixels
+        var wLong = 1
+        if (winW > winH) {
+            wLong = winW
+        } else {
+            wLong = winH
+        }
+        wLong = (wLong - 600) / 22
+        var stmp = ""
+        for (i in 0..wLong) {
+            stmp = stmp + " "
+        }
 
-               if (value1 == 1 ) {
-                    mToolbar.title = "Losteaka Oscilloscope 30sec " + stmp + "ロステーカ株式会社"
-                   xLenght = 1875f
-                   xIntervalRange = 100
-               //    xLenght = 187f                 // 試しに幅を 1/10　にするとき
-               }
-               else if (value1 == 2)
-               else if (value1 == 3) {
-                   mToolbar.title = "Losteaka Oscilloscope 90sec " + stmp + "ロステーカ株式会社"
-                   xLenght = 5625f
-                   xIntervalRange = 300
-               }
-               else if (value1 == 4) {
-                   mToolbar.title = "Losteaka Oscilloscope 120sec" + stmp + "ロステーカ株式会社"
-                   xLenght = 7500f
-                   xIntervalRange = 400
-               }
-               else if (value1 == 5) {
-                   mToolbar.title = "Losteaka Oscilloscope 150sec" + stmp + "ロステーカ株式会社"
-                   xLenght = 9375f
-                   xIntervalRange = 500
-               }
-               else if (value1 == 6) {
-                   mToolbar.title = "Losteaka Oscilloscope 180sec" + stmp + "ロステーカ株式会社"
-                   xLenght = 11250f
-                   xIntervalRange = 600
-               }
-               else if (value1 == 7) {
-                   mToolbar.title = "Losteaka Oscilloscope 210sec" + stmp + "ロステーカ株式会社"
-                   xLenght = 13125f
-                   xIntervalRange = 700
-               }
-               else if (value1 == 8) {
-                   mToolbar.title = "Losteaka Oscilloscope 15sec " + stmp + "ロステーカ株式会社"
-                   xLenght = 938f
-                   xIntervalRange = 50
-               }
+        if (value1 == 1) {
+            mToolbar.title = "Losteaka Oscilloscope 30sec " + stmp + "ロステーカ株式会社"
+            xLenght = 1875f
+            xIntervalRange = 100
+            //    xLenght = 187f                 // 試しに幅を 1/10　にするとき
+        } else if (value1 == 2)
+        else if (value1 == 3) {
+            mToolbar.title = "Losteaka Oscilloscope 90sec " + stmp + "ロステーカ株式会社"
+            xLenght = 5625f
+            xIntervalRange = 300
+        } else if (value1 == 4) {
+            mToolbar.title = "Losteaka Oscilloscope 120sec" + stmp + "ロステーカ株式会社"
+            xLenght = 7500f
+            xIntervalRange = 400
+        } else if (value1 == 5) {
+            mToolbar.title = "Losteaka Oscilloscope 150sec" + stmp + "ロステーカ株式会社"
+            xLenght = 9375f
+            xIntervalRange = 500
+        } else if (value1 == 6) {
+            mToolbar.title = "Losteaka Oscilloscope 180sec" + stmp + "ロステーカ株式会社"
+            xLenght = 11250f
+            xIntervalRange = 600
+        } else if (value1 == 7) {
+            mToolbar.title = "Losteaka Oscilloscope 210sec" + stmp + "ロステーカ株式会社"
+            xLenght = 13125f
+            xIntervalRange = 700
+        } else if (value1 == 8) {
+            mToolbar.title = "Losteaka Oscilloscope 15sec " + stmp + "ロステーカ株式会社"
+            xLenght = 938f
+            xIntervalRange = 50
+        }
         setSupportActionBar(mToolbar)
-               /* --------------- kawa2 ---------------------------
+        /* --------------- kawa2 ---------------------------
                    グラフ（チャート）の初期設定、2段で2つ分
                ---------------------------------------------------- */
-                   mChart = findViewById(R.id.chart) as LineChart
-                  initChart()
+        mChart = findViewById(R.id.chart) as LineChart
+        initChart()
 
-                   mChart2 = findViewById(R.id.chart2) as LineChart            // kawa3
-                   initChart2()
+        mChart2 = findViewById(R.id.chart2) as LineChart            // kawa3
+        initChart2()
 
 
 /* -------------------------------------------------------------------------------------
@@ -176,30 +170,39 @@ import kotlin.experimental.and
      -------------------------------------------------------------------------------------  */
 
 
+        //       mFab = findViewById<View>(R.id.fab) as FloatingActionButton
+        //       mFab!!.setOnClickListener(this)
 
- //       mFab = findViewById<View>(R.id.fab) as FloatingActionButton
- //       mFab!!.setOnClickListener(this)
-
-  //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
+        //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
         mEdRead = findViewById<View>(R.id.ed_read) as TextView                  // kawa EditからTextView に変更
 
- //       mEdWrite = findViewById<View>(R.id.ed_write) as EditText          // 送信することはないのでマスクする
+        //       mEdWrite = findViewById<View>(R.id.ed_write) as EditText          // 送信することはないのでマスクする
         mService = BluetoothService.getDefaultInstance()
         mWriter = BluetoothWriter(mService)
 
         //★★★ ソフトキーボードを隠す。
-     //   val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-     //   inputMethodManager.hideSoftInputFromWindow(mEdWrite?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
+        //   val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //   inputMethodManager.hideSoftInputFromWindow(mEdWrite?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
 
         /* --------------------------------------------------
            ボタンをタッチすると、MainActivityの画面に戻る
            MainActivityでX軸の幅を設定するようにした
          ---------------------------------------------------- */
         val btn1: Button = findViewById(R.id.backr_btn)
-            btn1.setOnClickListener {
+        btn1.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("Los", 2)
+            intent.putExtra("Los", 2)
             startActivity(intent)
+        }
+
+        // ボタンをタッチするたびに表示を変える
+        start_btn.setOnClickListener() {
+            if (start_btn.text == "START") {
+                start_btn.text ="STOP"
+            }
+            else {
+                start_btn.text ="START"
+            }
         }
 
 
@@ -216,7 +219,7 @@ import kotlin.experimental.and
 
 
 
-    }       // onCreat()ここまで
+    }       // ============ onCreat()ここまで =================
 
     /* -------------------------------------------------------------
     この画面で、X軸の幅を設定するときは、ここを使う
@@ -655,12 +658,13 @@ if (fvalue1 > 4500f) {
              if (loopCount < xLenght) {
                  mChart?.invalidate()               // 更新する
                  mChart2?.invalidate()
+                 loopCount++
              }else {
                  mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
                  mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
-                 loopCount = xLenght
+          //       loopCount = xLenght
              }
-             loopCount++                // 描き始めに軸に達するまでをカウントする
+         //    loopCount++                // 描き始めに軸に達するまでをカウントする
 
 // 今回のデータを次回のために保存する
         prevf1 = fvalue1

@@ -43,6 +43,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.android.synthetic.main.activity_device.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -202,6 +203,15 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             startActivity(intent)
         }
 
+        // ボタンをタッチするたびに表示を変える
+        start_btn.setOnClickListener() {
+            if (start_btn.text == "START") {
+                start_btn.text ="STOP"
+            }
+            else {
+                start_btn.text ="START"
+            }
+        }
 
         /* --------------------------------------------------
             NORMALボタンをタッチすると、DeviceActivityの画面に移る
@@ -215,7 +225,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 ---------------------------------------------------- */
 
 
-    }       // onCreat()ここまで
+    }       // ================= onCreat()ここまで ============================
 
     /* -------------------------------------------------------------
     この画面で、X軸の幅を設定するときは、ここを使う
@@ -738,7 +748,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         else {
             fvalue22 = 0.5f
         }
-
+        // ダミーでIO3を変化させる
         if (data2.xValCount %  333 == 0) {
             fvalue24 = 3.5f}
         else {
@@ -773,12 +783,13 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         if (loopCount < xLenght) {
             mChart?.invalidate()               // 更新する
             mChart2?.invalidate()
+            loopCount++
         }else {
             mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
             mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
-            loopCount = xLenght
+        //    loopCount = xLenght
         }
-        loopCount++                // 描き始めに軸に達するまでをカウントする
+     //   loopCount++                // 描き始めに軸に達するまでをカウントする
 
 // 今回のデータを次回のために保存する
         prevf1 = fvalue1
