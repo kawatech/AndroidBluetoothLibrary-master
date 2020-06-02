@@ -732,6 +732,18 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
         }
 
+        // ダミーでIO1を変化させる
+        if (data2.xValCount %  100 == 0) {
+            fvalue22 = 1.5f}
+        else {
+            fvalue22 = 0.5f
+        }
+
+        if (data2.xValCount %  333 == 0) {
+            fvalue24 = 3.5f}
+        else {
+            fvalue24 = 2.5f
+        }
 
 
         data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
