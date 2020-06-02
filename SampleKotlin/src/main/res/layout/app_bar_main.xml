@@ -33,6 +33,51 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
+
+
+
+
+
+    <RadioGroup
+        android:id="@+id/mode_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/normal_button"
+
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/normal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="NORMAL"
+            android:layout_gravity="right"/>
+
+        <RadioButton
+            android:id="@+id/debug_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="DEBUG"
+            android:layout_gravity="right"/>
+
+    </RadioGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"

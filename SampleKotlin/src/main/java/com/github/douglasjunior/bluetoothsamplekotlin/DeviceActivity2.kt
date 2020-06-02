@@ -194,8 +194,8 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         /* --------------------------------------------------
            ボタンをタッチすると、MainActivityの画面に戻る
            MainActivityでX軸の幅を設定するようにした
-         ---------------------------------------------------- */
-        val btn1: Button = findViewById(R.id.monitor_btn)
+        ---------------------------------------------------- */
+        val btn1: Button = findViewById(R.id.backr_btn)
         btn1.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("Los", 2)
@@ -205,14 +205,14 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
         /* --------------------------------------------------
             NORMALボタンをタッチすると、DeviceActivityの画面に移る
-        ---------------------------------------------------- */
+
         val btn2: Button = findViewById(R.id.normal_btn)
         btn2.setOnClickListener {
             val intent = Intent(this, DeviceActivity::class.java)
             intent.putExtra("Los", 2)
             startActivity(intent)
         }
-
+---------------------------------------------------- */
 
 
     }       // onCreat()ここまで

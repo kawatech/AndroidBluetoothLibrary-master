@@ -195,7 +195,7 @@ import kotlin.experimental.and
            ボタンをタッチすると、MainActivityの画面に戻る
            MainActivityでX軸の幅を設定するようにした
          ---------------------------------------------------- */
-        val btn1: Button = findViewById(R.id.monitor_btn)
+        val btn1: Button = findViewById(R.id.backr_btn)
             btn1.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("Los", 2)
@@ -205,14 +205,14 @@ import kotlin.experimental.and
 
         /* --------------------------------------------------
           DEBUGボタンをタッチすると、DeviceActivity2の画面に移る
-        ---------------------------------------------------- */
+
         val btn2: Button = findViewById(R.id.debug_btn)
         btn2.setOnClickListener {
             val intent = Intent(this, DeviceActivity2::class.java)
             intent.putExtra("Los", 2)
             startActivity(intent)
         }
-
+---------------------------------------------------- */
 
 
 

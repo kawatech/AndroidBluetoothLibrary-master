@@ -45,6 +45,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.RadioGroup
 import android.widget.Toast
 
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothDeviceDecorator
@@ -58,6 +59,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.android.synthetic.main.app_bar_main.view.*
 
 
 // kawa NavigationView.を追加した
@@ -129,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val los1 = intent.getIntExtra("Los",0)
 
-        // losteakaのロゴを表示する
+        // 起動後最初であれば、losteakaのロゴを表示する
         if (los1 == 0) {
             startActivity(Intent(this@MainActivity, BitmapActivity::class.java))
         }
@@ -278,8 +280,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // ここで画面を替える
         //    val intent = Intent(this@MainActivity, DeviceActivity::class.java)
 
+
+            var intent = Intent(this@MainActivity, DeviceActivity::class.java)
+            val modeGroup: RadioGroup = findViewById(R.id.mode_group)
+            val id = modeGroup.checkedRadioButtonId
+            if ( id == modeGroup.normal_button.id ) {
+                intent = Intent(this@MainActivity, DeviceActivity::class.java)
+            } else if ( id == modeGroup.debug_button.id  ){
+                    intent = Intent(this@MainActivity, DeviceActivity2::class.java)
+            }
+
+
+         //   modeGroup.setOnCheckedChangeListener { _, checkedId: Int ->
+         //       when (checkedId) {
+        //            R.id.normal_button -> intent = Intent(this@MainActivity, DeviceActivity::class.java)
+        //            R.id.debug_button -> intent = Intent(this@MainActivity, DeviceActivity2::class.java)
+        //        }
+        //    }
             // 新規の画面の時
-            val intent = Intent(this@MainActivity, DeviceActivity::class.java)
+         //   val intent = Intent(this@MainActivity, DeviceActivity::class.java)
 
             intent.putExtra("XSEC", mGenre)             // データを渡す, startAvtivity()の前にやる
             startActivity(intent)
