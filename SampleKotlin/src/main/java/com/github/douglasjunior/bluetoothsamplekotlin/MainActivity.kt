@@ -104,7 +104,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // 画面の長い方のサイズから間に入れるスペースを計算する
-    //    wLong = (wLong - 840) / 7
+    //    wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+
         wLong = (wLong - 600) / 22          //  全部入るのはこれ
 
         var stmp = ""

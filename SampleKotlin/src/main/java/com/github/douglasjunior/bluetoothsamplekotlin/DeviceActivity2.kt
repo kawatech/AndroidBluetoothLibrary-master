@@ -110,7 +110,11 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         else {
             wLong = winH
         }
-        wLong = (wLong - 600) / 22
+
+     //   wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+           wLong = (wLong - 600) / 22            // 全部入るのはこれ
+
+
         var stmp = ""
         for (i in 0..wLong) {
             stmp = stmp + " "
@@ -227,33 +231,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
     }       // ================= onCreat()ここまで ============================
 
-    /* -------------------------------------------------------------
-    この画面で、X軸の幅を設定するときは、ここを使う
-    いまは、ドロワーを出そうとすると停止するのでマスク
-    ----------------------------------------------------------------- */
-/*
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.nav_30s) {
-            mToolbar.title = "30sec"
-            mGenre = 1
-        } else if (id == R.id.nav_60s) {
-            mToolbar.title = "60sec"
-            mGenre = 2
-        } else if (id == R.id.nav_90s) {
-            mToolbar.title = "90sec"
-            mGenre = 3
-        } else if (id == R.id.nav_120s) {
-            mToolbar.title = "120sec"
-            mGenre = 4
-        }
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-*/
 
 
     override fun onResume() {
@@ -407,14 +384,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         // ここが受信データが入ったときに実行される関数、この中で処理する
      ------------------------------------------------------------------------------- */
     override fun onDataRead(buffer: ByteArray, length: Int) {
-        //  Log.d(TAG, "onDataRead: " + String(buffer, 0, length))      // これはAndroid Studio に出す分
-        //   Log.d(TAG, "onDataRead: " + buffer.contentToString())       // これはLogで10進数が出る
 
-        //  mEdRead!!.append("""    < ${String(buffer, 0, length)}    """.trimIndent()) // org 文字化けする
-
-        //  val buffer1 = byteArrayOfInts(0xA1, 0x2E, 0x38, 0xD4, 0x89, 0xC3)
-        //    mEdRead!!.setText(buffer.contentToString(), TextView.BufferType.NORMAL)     // kawa 数字10進数を連続で出す 下位2bit OKだが10進
-//    mEdRead!!.setText(buffer.contentToString())                  // kawa TextView に変更
 
 // kawa このループの中で何かする
 
@@ -569,11 +539,13 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
 
 
-
-        val date = Date()
-        val format = SimpleDateFormat("HH:mm:ss")
-        data.addXValue(format.format(date))
-        data2.addXValue(format.format(date))
+// STARTボタンをタップしたら表示する
+        if (start_btn.text == "STOP") {
+            val date = Date()
+            val format = SimpleDateFormat("HH:mm:ss")
+            data.addXValue(format.format(date))
+            data2.addXValue(format.format(date))
+        }
 
         // 初期値を設定しておく
         var fvalue1 = 5000f
@@ -616,34 +588,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
 
 
-        /* --------------------------------------------------------------
-           if(tmpOffset > 0) {
-               for (k in 0..(tmpOffset - 1)) {
-                   buffer[k] = 0x02.toByte()
-               }
-           }
-
-         // workBufferに入れる
-        if(offset > 0) {
-            for (k in 0..(offset - 1)) {
-                workBuffer[k] = restBuffer[k]
-            }
-        }
-
-        // ここからNGが出る 直った()にする
-          for(k in 0..(ll - offset-1)) {
-              workBuffer[k + offset] = buffer[k]
-          }
-
-          // restBuffer[ ]に入れる
-        // ここからNGが出る
-        if(offset > 0) {
-            for (k in 0..(offset - 1)) {
-              //  restBuffer[k] = buffer[ll - offset + k + 1]
-                restBuffer[k] = buffer[ll - offset + k]
-            }
-        }
-    ----------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------------
  連続して、00 00 01 01 の並びの時に値を抽出する。
@@ -732,13 +676,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             fvalue1 = prevf1
             fvalue2 = prevf2
 
-            //   for (i in 0..10) {
 
-
-            //   mEdRead!!.setText(buffer[i].toString())
-            //        mEdRead!!.append(buffer[i].toString())
-            //   mEdRead!!.append(buffer.toString())
-            //    }
 
         }
 
@@ -755,16 +693,17 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             fvalue24 = 2.5f
         }
 
-
-        data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-        data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
-        data2.addEntry(Entry(fvalue21, set21.getEntryCount()), 0)
-        data2.addEntry(Entry(fvalue22, set22.getEntryCount()), 1)
-        data2.addEntry(Entry(fvalue23, set23.getEntryCount()), 2)
-        data2.addEntry(Entry(fvalue24, set24.getEntryCount()), 3)
-        data2.addEntry(Entry(fvalue25, set24.getEntryCount()), 4)
-        data2.addEntry(Entry(fvalue26, set24.getEntryCount()), 5)
-
+// STARTボタンをタップしたら表示する
+        if (start_btn.text == "STOP") {
+            data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+            data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
+            data2.addEntry(Entry(fvalue21, set21.getEntryCount()), 0)
+            data2.addEntry(Entry(fvalue22, set22.getEntryCount()), 1)
+            data2.addEntry(Entry(fvalue23, set23.getEntryCount()), 2)
+            data2.addEntry(Entry(fvalue24, set24.getEntryCount()), 3)
+            data2.addEntry(Entry(fvalue25, set24.getEntryCount()), 4)
+            data2.addEntry(Entry(fvalue26, set24.getEntryCount()), 5)
+        }
 
 
         //  データを追加したら必ずよばないといけない
@@ -795,117 +734,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         prevf1 = fvalue1
         prevf2 = fvalue2
 
-
-/* ----------------------------------------------------------------------------
-        ここから下は、試行錯誤した残り
-        何をやったか残すため、コメントあるとしたままにしておく
--------------------------------------------------------------------------------- */
-
-/*
-        for( i in 0..ll-2 ){
-
-
-         //   Log.d(TAG, "onDataRead: " + (buffer[i] and 0x03))       // これで、0, 0, 1, 1, 3の繰り返しOK
-        //    mEdRead!!.setText((buffer[i] and 0x03).toString())              // 0, 1, 3の繰り返し、連続表示はない
-
-            // 連続した2バイトの下2ビットが00
-            if (((workBuffer[i]?. and (0x03)) == 0x00.toByte()) and ((workBuffer[i+1]?. and (0x03)) == 0x00.toByte())) {
-                var v = workBuffer[i + 1]!!.toInt() and 0xFC
-                var u = workBuffer[i]!!.toInt() and 0xFC
-                var nn = u.shl(4) + v.ushr(2)
-
-           //     Log.d(TAG, "onDataRead: " + nn)           //  ここで書くようにLogが多くなると描画が遅くなる
-          //      Log.d(TAG, "onDataRead: " + i)
-                mEdRead!!.setText(nn.toString())
-
-                fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
-            }
-
-            // 連続した2バイトの下2ビットが01
-            if (((workBuffer[i]?. and (0x03)) == 0x01.toByte()) and ((workBuffer[i+1]?. and (0x03)) == 0x01.toByte())) {
-                var v = workBuffer[i + 1]!!.toInt() and 0xFC
-                var u = workBuffer[i]!!.toInt() and 0xFC
-                var nn = u.shl(4) + v.ushr(2)
-
-                fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
-            }
-
-            // 1バイトの下2ビットが11
-            if ((workBuffer[i]?. and (0x03)) == 0x03.toByte())  {
-                var u = workBuffer[i]!!.toInt() and 0xFC
-                var nn = u.ushr(2)
-
- //   if(nn != 0) {
- //   Log.d(TAG, "onDataRead: " + nn)
- //   mEdRead!!.setText(nn.toString())
-//}
-               fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
-            }
-
-       //     if ((j % 16 == 0 ) || (fvalue3 != 0f)) {
-            if (j % 40 == 0 ) {
-            //    data.addEntry(Entry(fvalue, set.entryCount), 0)
-                if (fvalue1 != 9999f) {
-                    data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-                }
-                if (fvalue2 != 9999f) {
-                    data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
-                }
-                if (fvalue3 != 9999f) {
-                    data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
-                }
-
-
-                     //   data.addEntry(Entry(fvalue/2, set2.entryCount), 0)
-
-                        //  データを追加したら必ずよばないといけない
-                mChart?.notifyDataSetChanged()
-                mChart?.setVisibleXRangeMaximum(60f)
-                mChart?.moveViewToX(data.xValCount - 61.toFloat()) //  移動する
-
-                // kawa3
-                mChart2?.notifyDataSetChanged()
-                mChart2?.setVisibleXRangeMaximum(60f)
-                mChart2?.moveViewToX(data2.xValCount - 61.toFloat()) //  移動する
-
-
-            }
-            j++
-
-            //    Log.d(TAG, "onDataRead: " + i.toString())               // kawa これは動く
-        }       // end of for
-*/
-
-
-
-
-
-
-
-        //    mEdRead!!.setText(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()), TextView.BufferType.NORMAL)        // 下位2bir OK
-
-        // -------------------------------------------------------------------------------------------
-        //   val len = buffer.size
-        //   var stmp =""
-        // var stmp = buffer[1]
-        //  Log.d(TAG, "onDataRead: " + stmp)
-        //   mEdRead!!.setText(bytesToHex(buffer), TextView.BufferType.NORMAL)       // 停止する
-
-        //   mEdRead!!.setText(bytesToHex(buffer), TextView.BufferType.NORMAL)       // 停止する
-
-        //   mEdRead!!.append(bytesToHex(buffer))    // 停止する
-        //   mEdRead!!.setText(bytesToHex(buffer))    // 停止する
-
-        //    mEdRead!!.setText(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()), TextView.BufferType.NORMAL)        // 下位2bir OK
-        //   mEdRead!!.append(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()))
-        //    mEdRead!!.append(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()))         // kawa 連続、下位2bit　NG
-        //   mEdRead!!.append(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()), 0, 4)          // kawa 停止する
-
-
-        //   mEdRead!!.setText(Integer.toHexString(buffer.contentToString()), TextView.BufferType.NORMAL)
-
-        //    mEdRead!!.setText(buffer.toString(), TextView.BufferType.NORMAL)      // kawa 単独行　「B@で始まる
-        //   mEdRead!!.append(buffer.toString())             // kawa 連続だし　「B@で始まる
 
 
 

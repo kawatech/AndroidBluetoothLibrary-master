@@ -109,7 +109,9 @@ import kotlin.experimental.and
         } else {
             wLong = winH
         }
-        wLong = (wLong - 600) / 22
+     //   wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+        wLong = (wLong - 600) / 22            // 全部入るのはこれ
+
         var stmp = ""
         for (i in 0..wLong) {
             stmp = stmp + " "
@@ -470,11 +472,13 @@ import kotlin.experimental.and
             data2.addDataSet(set3)
         }
 
-
+// STARTボタンをタップしたら表示する
+    if (start_btn.text == "STOP") {
         val date = Date()
         val format = SimpleDateFormat("HH:mm:ss")
         data.addXValue(format.format(date))
         data2.addXValue(format.format(date))
+    }
 
     // 初期値を設定しておく
         var fvalue1 = 5000f
@@ -636,40 +640,40 @@ if (fvalue1 > 4500f) {
 
          }
 
+// STARTボタンをタップしたら表示する
+    if (start_btn.text == "STOP") {
+            data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
+            data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
+            data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
 
+            //  データを追加したら必ずよばないといけない
+            //   data.notifyDataChanged()
+            mChart?.notifyDataSetChanged()
+            mChart?.setVisibleXRangeMaximum(xLenght)
+            mChart?.setVisibleXRangeMinimum(xLenght)           // 最小値を最大値と同じにすると軸が固定
+            //      mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
 
-             data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
-             data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
-             data2.addEntry(Entry(fvalue3, set3.getEntryCount()), 0)
-
-             //  データを追加したら必ずよばないといけない
-             //   data.notifyDataChanged()
-             mChart?.notifyDataSetChanged()
-             mChart?.setVisibleXRangeMaximum(xLenght)
-             mChart?.setVisibleXRangeMinimum(xLenght)           // 最小値を最大値と同じにすると軸が固定
-       //      mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
-
-             mChart2?.notifyDataSetChanged()
-             mChart2?.setVisibleXRangeMaximum(xLenght)
-             mChart2?.setVisibleXRangeMinimum(xLenght)
+            mChart2?.notifyDataSetChanged()
+            mChart2?.setVisibleXRangeMaximum(xLenght)
+            mChart2?.setVisibleXRangeMinimum(xLenght)
 
             // X軸を固定したときの画像の移動方法
             // 軸いっぱいに達するまでは単に更新する。それ以降の時は移動させる
-             if (loopCount < xLenght) {
-                 mChart?.invalidate()               // 更新する
-                 mChart2?.invalidate()
-                 loopCount++
-             }else {
-                 mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
-                 mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
-          //       loopCount = xLenght
-             }
-         //    loopCount++                // 描き始めに軸に達するまでをカウントする
+            if (loopCount < xLenght) {
+                mChart?.invalidate()               // 更新する
+                mChart2?.invalidate()
+                loopCount++
+            } else {
+                mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
+                mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
+                //       loopCount = xLenght
+            }
+            //    loopCount++                // 描き始めに軸に達するまでをカウントする
 
 // 今回のデータを次回のために保存する
-        prevf1 = fvalue1
-        prevf2 = fvalue2
-
+            prevf1 = fvalue1
+            prevf2 = fvalue2
+        }
 
 /* ----------------------------------------------------------------------------
         ここから下は、試行錯誤した残り
