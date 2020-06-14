@@ -84,9 +84,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device2)
 
-        // kawa Drawer ここの修正が必要
-        //       val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        //    setSupportActionBar(toolbar)
 
 
         // kawa Drawer これがあると停止する
@@ -158,6 +155,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             xIntervalRange = 50
         }
         setSupportActionBar(mToolbar)
+
         /* --------------- kawa2 ---------------------------
             グラフ（チャート）の初期設定、2段で2つ分
         ---------------------------------------------------- */
@@ -168,22 +166,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         initChart2()
 
 
-/* -------------------------------------------------------------------------------------
-               // kawa Drawer ナビゲーションドロワーの設定
-               // メニューが全画面になってしまう
-               val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-               val toggle = ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name)
-               drawer.addDrawerListener(toggle)
-               toggle.syncState()
-
-               val navigationView = findViewById<NavigationView>(R.id.nav_view)
-               navigationView.setNavigationItemSelectedListener(this)
-     -------------------------------------------------------------------------------------  */
-
-
-
-        //       mFab = findViewById<View>(R.id.fab) as FloatingActionButton
-        //       mFab!!.setOnClickListener(this)
 
         //      mEdRead = findViewById<View>(R.id.ed_read) as EditText
         mEdRead = findViewById<View>(R.id.ed_read) as TextView                  // kawa EditからTextView に変更
@@ -192,9 +174,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         mService = BluetoothService.getDefaultInstance()
         mWriter = BluetoothWriter(mService)
 
-        //★★★ ソフトキーボードを隠す。
-        //   val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        //   inputMethodManager.hideSoftInputFromWindow(mEdWrite?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
 
         /* --------------------------------------------------
            ボタンをタッチすると、MainActivityの画面に戻る
@@ -216,17 +195,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
                 start_btn.text ="START"
             }
         }
-
-        /* --------------------------------------------------
-            NORMALボタンをタッチすると、DeviceActivityの画面に移る
-
-        val btn2: Button = findViewById(R.id.normal_btn)
-        btn2.setOnClickListener {
-            val intent = Intent(this, DeviceActivity::class.java)
-            intent.putExtra("Los", 2)
-            startActivity(intent)
-        }
----------------------------------------------------- */
 
 
     }       // ================= onCreat()ここまで ============================
@@ -439,6 +407,9 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             data.addDataSet(set2)  /////
         }
 
+        /* -------------------------------------------------------------------
+        IO0からIO5を準備する
+        ---------------------------------------------------------------------- */
         if (set21 == null) {
             set21 = LineDataSet(null, "IO0")        // kawa3
             //   set3.color = Color.GREEN                      // 緑
@@ -531,14 +502,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
 
 
-
-
-
-
-
-
-
-
 // STARTボタンをタップしたら表示する
         if (start_btn.text == "STOP") {
             val date = Date()
@@ -618,53 +581,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         }
 
 
-
-
-// 下2ビットが一致しなかったとき、データを出力する
-        /*
-    if (fvalue1 > 4500f) {
-        mEdRead!!.setText(Integer.toHexString(ByteBuffer.wrap(buffer).getInt()), TextView.BufferType.NORMAL)
-    }
-    */
-
-/*
-         for (i in 0..10) {                        // データが10個なら0と1
-             // 連続した2バイトの下2ビットが00
-             if (((buffer[i] and (0x03)) == 0x00.toByte()) and ((buffer[i + 1] and (0x03)) == 0x00.toByte())) {
-                 var v = buffer[i + 1].toInt() and (0xFC)
-                 var u = buffer[i].toInt() and (0xFC)
-                 var nn = u.shl(4) + v.ushr(2)
-
-                 fvalue1 = nn.toFloat()               // kawa Floatに変換して使う
-                 break
-             }
-         }
-
-         for (i in 0..10) {
-             // 連続した2バイトの下2ビットが01
-             if (((buffer[i] and (0x03)) == 0x01.toByte()) and ((buffer[i + 1] and (0x03)) == 0x01.toByte())) {
-                 var v = buffer[i + 1].toInt() and (0xFC)
-                 var u = buffer[i].toInt() and (0xFC)
-                 var nn = u.shl(4) + v.ushr(2)
-                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
-                 break
-             }
-         }
-*/
-
-
-
-/*
-         for (i in 0..10) {
-             // 1バイトの下2ビットが11
-             if ((buffer[i] and (0x03)) == 0x03.toByte()) {
-                 var u = buffer[i].toInt() and (0xFC)
-                 var nn = u.ushr(2)
-                 fvalue3 = nn.toFloat()               // kawa Floatに変換して使う
-                 break
-             }
-         }
-*/
         fvalue21 = tmpOffset.toFloat()          // 00 00 のオフセットを出力する
 
 
@@ -682,13 +598,13 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
         // ダミーでIO1を変化させる
         if (data2.xValCount %  100 == 0) {
-            fvalue22 = 1.5f}
+            fvalue22 = 1.3f}
         else {
             fvalue22 = 0.5f
         }
         // ダミーでIO3を変化させる
         if (data2.xValCount %  333 == 0) {
-            fvalue24 = 3.5f}
+            fvalue24 = 3.3f}
         else {
             fvalue24 = 2.5f
         }
@@ -737,7 +653,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
 
 
-    }   // end of onDataRead()
+    }   // ================================== end of onDataRead() ===========================
 
 
 

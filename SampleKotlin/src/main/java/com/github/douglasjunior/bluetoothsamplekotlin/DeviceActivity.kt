@@ -80,6 +80,7 @@ import kotlin.experimental.and
     // X軸のラベルの間隔
     private var xIntervalRange = 100
 
+    // 画面を開くときの処理
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
@@ -99,6 +100,10 @@ import kotlin.experimental.and
  ------------------------------------------------------------------------------------------------- */
         val value1 = intent.getIntExtra("XSEC", 1)
 
+ /* ---------------------------------------------------------------------------------
+    画面の縦横のサイズを求めて、大きい方をwLongに入れる
+ ------------------------------------------------------------------------------------- */
+
         val dm = DisplayMetrics()
         getWindowManager().getDefaultDisplay().getMetrics(dm)
         var winW = (dm.widthPixels)
@@ -112,11 +117,18 @@ import kotlin.experimental.and
      //   wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
         wLong = (wLong - 600) / 22            // 全部入るのはこれ
 
+        /* --------------------------------------------
+        ロステーカをタイトルの右端に表示するためのスペースを入れる。
+        画面の精細さによって見え方が変わる
+        ------------------------------------------------ */
         var stmp = ""
         for (i in 0..wLong) {
             stmp = stmp + " "
         }
 
+        /* -------------------------------------------------------------------------------
+        タイトルに秒数を追加する。スペースを入れてからロステーカ株式会社をつける
+         ---------------------------------------------------------------------------------- */
         if (value1 == 1) {
             mToolbar.title = "Losteaka Oscilloscope 30sec " + stmp + "ロステーカ株式会社"
             xLenght = 1875f
@@ -149,6 +161,7 @@ import kotlin.experimental.and
             xIntervalRange = 50
         }
         setSupportActionBar(mToolbar)
+
         /* --------------- kawa2 ---------------------------
                    グラフ（チャート）の初期設定、2段で2つ分
                ---------------------------------------------------- */
@@ -197,7 +210,11 @@ import kotlin.experimental.and
             startActivity(intent)
         }
 
-        // ボタンをタッチするたびに表示を変える
+
+        /* ---------------------------------------
+        ボタンをタッチするたびに表示を変える
+        ボタンがSTARTだったら、STOPにする。又はその逆。
+        ------------------------------------------- */
         start_btn.setOnClickListener() {
             if (start_btn.text == "START") {
                 start_btn.text ="STOP"
@@ -217,7 +234,7 @@ import kotlin.experimental.and
             intent.putExtra("Los", 2)
             startActivity(intent)
         }
----------------------------------------------------- */
+　　　　---------------------------------------------------- */
 
 
 
@@ -279,7 +296,8 @@ import kotlin.experimental.and
 
         // if disabled, scaling can be done on x- and y-axis separately
         mChart?.setPinchZoom(true)
-
+     //   mChart?.setPinchZoom(false)
+     //   mChart?.isScaleXEnabled = true
 
         // set an alternative background color
      //   mChart?.setBackgroundColor(Color.LTGRAY)
@@ -377,8 +395,6 @@ import kotlin.experimental.and
     //    leftAxis?.textColor = Color.BLACK
         leftAxis?.textColor = Color.LTGRAY
 
-     //   leftAxis?.setAxisMaxValue( 100.0f)
-     //   leftAxis?.setAxisMinValue(-10.0f)
 
         // Y軸の幅を明示的に1.0にする
         leftAxis?.setLabelCount(6,true)         // Y軸のラベルを6個
@@ -472,13 +488,17 @@ import kotlin.experimental.and
             data2.addDataSet(set3)
         }
 
-// STARTボタンをタップしたら表示する
+/* ---------------------------------------------------------------------------------
+ STARTボタンをタップしたら、ボタンはSTOPになっている。この時グラフを表示する
+ ここでは、グラフの上部に時間を入れる。
+ ---------------------------------------------------------------------------------- */
     if (start_btn.text == "STOP") {
         val date = Date()
         val format = SimpleDateFormat("HH:mm:ss")
         data.addXValue(format.format(date))
         data2.addXValue(format.format(date))
     }
+
 
     // 初期値を設定しておく
         var fvalue1 = 5000f
@@ -629,18 +649,13 @@ if (fvalue1 > 4500f) {
          if (fvalue2 > 4095) {
              fvalue1 = prevf1
              fvalue2 = prevf2
-
-          //   for (i in 0..10) {
-
-
-                 //   mEdRead!!.setText(buffer[i].toString())
-         //        mEdRead!!.append(buffer[i].toString())
-                 //   mEdRead!!.append(buffer.toString())
-         //    }
-
          }
 
-// STARTボタンをタップしたら表示する
+/* -----------------------------------------------------------
+ STARTボタンをタップしたら表示する
+ STARTをタップしたら、ボタンはSTOPになっている。
+ よって、STOPなら表示する。データを追加して更新する。
+ -------------------------------------------------------------- */
     if (start_btn.text == "STOP") {
             data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
             data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
@@ -662,13 +677,12 @@ if (fvalue1 > 4500f) {
             if (loopCount < xLenght) {
                 mChart?.invalidate()               // 更新する
                 mChart2?.invalidate()
-                loopCount++
+                loopCount++             // 描き始めに軸に達するまでをカウントする
             } else {
                 mChart?.moveViewToX(data.xValCount - (xLenght + 1f)) //  移動する
                 mChart2?.moveViewToX(data2.xValCount - (xLenght + 1f)) //  移動する
                 //       loopCount = xLenght
             }
-            //    loopCount++                // 描き始めに軸に達するまでをカウントする
 
 // 今回のデータを次回のために保存する
             prevf1 = fvalue1

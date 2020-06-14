@@ -124,6 +124,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 // 端末の向きを取得
                 // AndroidManifest.xml でandroid:screenOrientation="landscape"にして
                 // そのままで横向きに固定する。よって、matrixでの回転はしない。
+
                 int orientation = getResources().getConfiguration().orientation;
              //   if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {

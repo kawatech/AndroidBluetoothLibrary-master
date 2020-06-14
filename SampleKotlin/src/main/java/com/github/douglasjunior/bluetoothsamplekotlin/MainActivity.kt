@@ -129,7 +129,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   //      val intent2 = Intent(this@MainActivity, BitmapActivity::class.java)
         //      intent2.putExtra("HOLIZON", Holiz)                      // 横長の時は1
-
+/* ---------------------------------------------------------------------------------
+キーワードLosでデータをやり取りする。初期値は0でこのときは LOSTEAK のロゴを表示する。
+表示した画面から戻るときは、1か2になる。このときは、LOSTEAKを表示しない。
+ ----------------------------------------------------------------------------------- */
         val los1 = intent.getIntExtra("Los",0)
 
         // 起動後最初であれば、losteakaのロゴを表示する
@@ -143,7 +146,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      //   initChart()
 
 
-// kawa Drawer 小駒マスクする、上の mToolbar を使う
+// kawa Drawer ここはマスクする、上の mToolbar を使う
    //     val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
   //      setSupportActionBar(toolbar)
 
@@ -167,7 +170,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-
+/* -----------------------------------------------------------------------
+ナビゲーションドロワーで画面の秒数を選択して、mGenreに整数設定
+ ------------------------------------------------------------------------- */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
@@ -202,11 +207,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
-
-
-
-
-
 
 
     override fun onResume() {
@@ -285,23 +285,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             var intent = Intent(this@MainActivity, DeviceActivity::class.java)
             val modeGroup: RadioGroup = findViewById(R.id.mode_group)
             val id = modeGroup.checkedRadioButtonId
+
+            // intentに遷移する先の画面の情報を入れる。このフォーマットで書く。
             if ( id == modeGroup.normal_button.id ) {
                 intent = Intent(this@MainActivity, DeviceActivity::class.java)
             } else if ( id == modeGroup.debug_button.id  ){
                     intent = Intent(this@MainActivity, DeviceActivity2::class.java)
             }
 
+            // データを渡す, startAvtivity()の前にやる。データは画面の秒数を決める整数
+            intent.putExtra("XSEC", mGenre)
 
-         //   modeGroup.setOnCheckedChangeListener { _, checkedId: Int ->
-         //       when (checkedId) {
-        //            R.id.normal_button -> intent = Intent(this@MainActivity, DeviceActivity::class.java)
-        //            R.id.debug_button -> intent = Intent(this@MainActivity, DeviceActivity2::class.java)
-        //        }
-        //    }
-            // 新規の画面の時
-         //   val intent = Intent(this@MainActivity, DeviceActivity::class.java)
-
-            intent.putExtra("XSEC", mGenre)             // データを渡す, startAvtivity()の前にやる
+            // 上でintentに入れた情報に従って遷移する。
             startActivity(intent)
             builder.setCancelable(false)
             builder.show()
