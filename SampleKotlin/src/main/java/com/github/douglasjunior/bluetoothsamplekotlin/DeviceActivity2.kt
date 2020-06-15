@@ -333,7 +333,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         leftAxis?.setLabelCount(6,true)         // Y軸のラベルを6個
         leftAxis?.setGranularity(1.0f)                           // 間隔は1.0
 
-        leftAxis?.setAxisMaxValue( 5.0f)
+        leftAxis?.setAxisMaxValue( 6.0f)
         leftAxis?.setAxisMinValue(0.0f)
         leftAxis?.setShowOnlyMinMax(true)
 
@@ -375,12 +375,12 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         var set2 = data.getDataSetByIndex(1)       /////
 
         // 下のグラフに描く、dsta2でインデックスは0から
-        var set21 = data2.getDataSetByIndex(0)
-        var set22 = data2.getDataSetByIndex(1)
-        var set23 = data2.getDataSetByIndex(2)
-        var set24 = data2.getDataSetByIndex(3)
-        var set25 = data2.getDataSetByIndex(4)
-        var set26 = data2.getDataSetByIndex(5)
+        var set20 = data2.getDataSetByIndex(0)
+        var set21 = data2.getDataSetByIndex(1)
+        var set22 = data2.getDataSetByIndex(2)
+        var set23 = data2.getDataSetByIndex(3)
+        var set24 = data2.getDataSetByIndex(4)
+        var set25 = data2.getDataSetByIndex(5)
 
         //   }
 
@@ -410,84 +410,84 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         /* -------------------------------------------------------------------
         IO0からIO5を準備する
         ---------------------------------------------------------------------- */
-        if (set21 == null) {
-            set21 = LineDataSet(null, "IO0")        // kawa3
+        if (set20 == null) {
+            set20 = LineDataSet(null, "IO0")        // kawa3
             //   set3.color = Color.GREEN                      // 緑
             //    set3.color = Color.BLACK
             //      set3.color = Color.MAGENTA                  // 桃色
             //      set3.color = Color.CYAN                     // 空色 //
             //      set3.color = Color.parseColor("#008577")        // 濃い緑
             //   set3.color = Color.parseColor("#d2691e")    //チョコレート色
-            set21.color = Color.YELLOW
-            set21.setDrawValues(false)
-            set21.setDrawCircles(false)
-            data2.addDataSet(set21)
+            set20.color = Color.YELLOW
+            set20.setDrawValues(false)
+            set20.setDrawCircles(false)
+            data2.addDataSet(set20)
         }
 
-        if (set22 == null) {
-            set22 = LineDataSet(null, "IO1")        // kawa3
+        if (set21 == null) {
+            set21 = LineDataSet(null, "IO1")        // kawa3
             //   set22.color = Color.GREEN                      // 緑
             //    set22.color = Color.BLACK
             //      set22.color = Color.MAGENTA                  // 桃色
             //      set22.color = Color.CYAN                     // 空色 //
             //      set22.color = Color.parseColor("#008577")        // 濃い緑
            //    set22.color = Color.parseColor("#d2691e")    //チョコレート色
-            set22.color = Color.parseColor("#ffa500")    //オレンジ
+            set21.color = Color.parseColor("#ffa500")    //オレンジ
+         //   set22.color = Color.YELLOW
+            set21.setDrawValues(false)
+            set21.setDrawCircles(false)
+            data2.addDataSet(set21)
+        }
+
+        if (set22 == null) {
+            set22 = LineDataSet(null, "IO2")        // kawa3
+            //   set22.color = Color.GREEN                      // 緑
+            //    set22.color = Color.BLACK
+            set22.color = Color.MAGENTA                  // 桃色
+            //      set22.color = Color.CYAN                     // 空色 //
+            //      set22.color = Color.parseColor("#008577")        // 濃い緑
+            //   set22.color = Color.parseColor("#d2691e")    //チョコレート色
          //   set22.color = Color.YELLOW
             set22.setDrawValues(false)
             set22.setDrawCircles(false)
             data2.addDataSet(set22)
         }
 
+
         if (set23 == null) {
-            set23 = LineDataSet(null, "IO2")        // kawa3
+            set23 = LineDataSet(null, "IO3")        // kawa3
             //   set22.color = Color.GREEN                      // 緑
             //    set22.color = Color.BLACK
-                  set23.color = Color.MAGENTA                  // 桃色
-            //      set22.color = Color.CYAN                     // 空色 //
+         //   set24.color = Color.MAGENTA                  // 桃色
+            set23.color = Color.CYAN                     // 空色 //
             //      set22.color = Color.parseColor("#008577")        // 濃い緑
             //   set22.color = Color.parseColor("#d2691e")    //チョコレート色
-         //   set22.color = Color.YELLOW
-            set23.setDrawValues(false)
+            //   set22.color = Color.YELLOW
+         //   set23.setDrawValues(false)
             set23.setDrawCircles(false)
             data2.addDataSet(set23)
         }
 
 
         if (set24 == null) {
-            set24 = LineDataSet(null, "IO3")        // kawa3
+            set24 = LineDataSet(null, "IO4")        // kawa3
             //   set22.color = Color.GREEN                      // 緑
             //    set22.color = Color.BLACK
-         //   set24.color = Color.MAGENTA                  // 桃色
-                  set24.color = Color.CYAN                     // 空色 //
+            //   set24.color = Color.MAGENTA                  // 桃色
+         //   set25.color = Color.CYAN                     // 空色 //
+            set24.color = Color.RED                     // 赤
             //      set22.color = Color.parseColor("#008577")        // 濃い緑
             //   set22.color = Color.parseColor("#d2691e")    //チョコレート色
             //   set22.color = Color.YELLOW
-         //   set23.setDrawValues(false)
+            //   set23.setDrawValues(false)
             set24.setDrawCircles(false)
             data2.addDataSet(set24)
         }
 
 
         if (set25 == null) {
-            set25 = LineDataSet(null, "IO4")        // kawa3
-            //   set22.color = Color.GREEN                      // 緑
-            //    set22.color = Color.BLACK
-            //   set24.color = Color.MAGENTA                  // 桃色
-         //   set25.color = Color.CYAN                     // 空色 //
-            set25.color = Color.RED                     // 赤
-            //      set22.color = Color.parseColor("#008577")        // 濃い緑
-            //   set22.color = Color.parseColor("#d2691e")    //チョコレート色
-            //   set22.color = Color.YELLOW
-            //   set23.setDrawValues(false)
-            set25.setDrawCircles(false)
-            data2.addDataSet(set25)
-        }
-
-
-        if (set26 == null) {
-            set26 = LineDataSet(null, "IO5")        // kawa3
-               set26.color = Color.GREEN                      // 緑
+            set25 = LineDataSet(null, "IO5")        // kawa3
+            set25.color = Color.GREEN                      // 緑
             //    set22.color = Color.BLACK
             //   set24.color = Color.MAGENTA                  // 桃色
             //   set25.color = Color.CYAN                     // 空色 //
@@ -496,8 +496,8 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             //   set22.color = Color.parseColor("#d2691e")    //チョコレート色
             //   set22.color = Color.YELLOW
             //   set23.setDrawValues(false)
-            set26.setDrawCircles(false)
-            data2.addDataSet(set26)
+            set25.setDrawCircles(false)
+            data2.addDataSet(set25)
         }
 
 
@@ -514,12 +514,12 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         var fvalue1 = 5000f
         var fvalue2 = 5000f
 
-        var fvalue21 = 0f
-        var fvalue22 = 0.5f
-        var fvalue23 = 1.5f
-        var fvalue24 = 2.5f
-        var fvalue25 = 3.5f
-        var fvalue26 = 4.5f
+        var fvalue20 = 5.0f
+        var fvalue21 = 4.0f
+        var fvalue22 = 3.0f
+        var fvalue23 = 2.0f
+        var fvalue24 = 1.0f
+        var fvalue25 = 0.0f
 
         var workBuffer = ByteArray(80)
 
@@ -576,12 +576,40 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
                 //     nn = nn and (0xFFF)
                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
 
+
+
+                v = buffer[i+4].toInt() and (0xFC)
+                nn = v.ushr(2)
+                if(nn == 63) {
+                    fvalue20 = 5.8f;
+                    fvalue21 = 4.8f;
+                    fvalue22 = 3.8f;
+                    fvalue23 = 2.8f;
+                    fvalue24 = 1.8f;
+                    fvalue25 = 0.8f;
+                }
+                else if(nn == 56) {
+                    fvalue20 = 5.0f;
+                    fvalue21 = 4.0f;
+                    fvalue22 = 3.0f;
+                    fvalue23 = 2.8f;
+                    fvalue24 = 1.8f;
+                    fvalue25 = 0.8f;
+                }
+                else {
+                    fvalue20 = 5.0f;
+                    fvalue21 = 4.0f;
+                    fvalue22 = 3.0f;
+                    fvalue23 = 2.0f;
+                    fvalue24 = 1.0f;
+                    fvalue25 = 0.0f;
+                }
                 break
             }
         }
 
 
-        fvalue21 = tmpOffset.toFloat()          // 00 00 のオフセットを出力する
+     //   fvalue21 = tmpOffset.toFloat()          // 00 00 のオフセットを出力する
 
 
         // 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
@@ -597,6 +625,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         }
 
         // ダミーでIO1を変化させる
+        /*
         if (data2.xValCount %  100 == 0) {
             fvalue22 = 1.3f}
         else {
@@ -608,17 +637,18 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         else {
             fvalue24 = 2.5f
         }
+         */
 
 // STARTボタンをタップしたら表示する
         if (start_btn.text == "STOP") {
             data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
             data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
-            data2.addEntry(Entry(fvalue21, set21.getEntryCount()), 0)
-            data2.addEntry(Entry(fvalue22, set22.getEntryCount()), 1)
-            data2.addEntry(Entry(fvalue23, set23.getEntryCount()), 2)
-            data2.addEntry(Entry(fvalue24, set24.getEntryCount()), 3)
-            data2.addEntry(Entry(fvalue25, set24.getEntryCount()), 4)
-            data2.addEntry(Entry(fvalue26, set24.getEntryCount()), 5)
+            data2.addEntry(Entry(fvalue20, set20.getEntryCount()), 0)
+            data2.addEntry(Entry(fvalue21, set21.getEntryCount()), 1)
+            data2.addEntry(Entry(fvalue22, set22.getEntryCount()), 2)
+            data2.addEntry(Entry(fvalue23, set23.getEntryCount()), 3)
+            data2.addEntry(Entry(fvalue24, set24.getEntryCount()), 4)
+            data2.addEntry(Entry(fvalue25, set25.getEntryCount()), 5)
         }
 
 
