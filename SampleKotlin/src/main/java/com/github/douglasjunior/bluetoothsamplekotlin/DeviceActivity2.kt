@@ -576,34 +576,22 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
                 //     nn = nn and (0xFFF)
                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
 
-
+                fvalue20 = 5.0f;
+                fvalue21 = 4.0f;
+                fvalue22 = 3.0f;
+                fvalue23 = 2.0f;
+                fvalue24 = 1.0f;
+                fvalue25 = 0.0f;
 
                 v = buffer[i+4].toInt() and (0xFC)
                 nn = v.ushr(2)
-                if(nn == 63) {
-                    fvalue20 = 5.8f;
-                    fvalue21 = 4.8f;
-                    fvalue22 = 3.8f;
-                    fvalue23 = 2.8f;
-                    fvalue24 = 1.8f;
-                    fvalue25 = 0.8f;
-                }
-                else if(nn == 56) {
-                    fvalue20 = 5.0f;
-                    fvalue21 = 4.0f;
-                    fvalue22 = 3.0f;
-                    fvalue23 = 2.8f;
-                    fvalue24 = 1.8f;
-                    fvalue25 = 0.8f;
-                }
-                else {
-                    fvalue20 = 5.0f;
-                    fvalue21 = 4.0f;
-                    fvalue22 = 3.0f;
-                    fvalue23 = 2.0f;
-                    fvalue24 = 1.0f;
-                    fvalue25 = 0.0f;
-                }
+                if ((nn and 0x01) == 0x01) fvalue20 = 5.8f;
+                if ((nn and 0x02) == 0x02) fvalue21 = 4.8f;
+                if ((nn and 0x04) == 0x04) fvalue22 = 3.8f;
+                if ((nn and 0x08) == 0x08) fvalue23 = 2.8f;
+                if ((nn and 0x10) == 0x10) fvalue24 = 1.8f;
+                if ((nn and 0x20) == 0x20) fvalue25 = 0.8f;
+
                 break
             }
         }
