@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'com.google.android.gms.oss-licenses-plugin'            // kawa OSS
 
 android {
     compileSdkVersion 26
@@ -37,4 +38,6 @@ dependencies {
     implementation  project(':BluetoothClassicLibrary')             // kawa
  //   implementation 'com.github.PhilJay:MPAndroidChart:v2.1.6'       // kawa2
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.5'
+ //   implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'       // kawa OSS
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'      // kawa OSS
 }

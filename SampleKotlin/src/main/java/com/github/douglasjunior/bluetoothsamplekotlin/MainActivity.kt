@@ -44,6 +44,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -59,6 +60,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity        // kawa OSS
 import kotlinx.android.synthetic.main.app_bar_main.view.*
 
 
@@ -104,8 +106,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // 画面の長い方のサイズから間に入れるスペースを計算する
-    //    wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
-        wLong = (wLong - 600) / 22          //  全部入るのはこれ
+        wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+    //    wLong = (wLong - 600) / 22          //  全部入るのはこれ
 
         var stmp = ""
         for (i in 0..wLong) {
@@ -166,6 +168,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mService!!.setOnScanCallback(this)
         mService!!.setOnEventCallback(this)
+
+
+        /* --------------------------------------------------
+          ボタンをタッチすると、オープンソースライセンスの画面に戻る
+kawa OSS
+       ---------------------------------------------------- */
+
+        val btn1: Button = findViewById(R.id.license_btn)
+        btn1.setOnClickListener {
+            val intent = Intent(this, OssLicensesMenuActivity::class.java)
+            intent.putExtra("title","Open source")
+            startActivity(intent)
+        }
+
 
     }
 

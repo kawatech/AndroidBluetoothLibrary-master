@@ -36,13 +36,16 @@
 
 
 
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
 
     <RadioGroup
         android:id="@+id/mode_group"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:checkedButton="@+id/normal_button"
 
@@ -50,27 +53,41 @@
 
         <RadioButton
             android:id="@+id/normal_button"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
             android:text="NORMAL"
-            android:layout_gravity="right"/>
+            android:layout_gravity="left"
+            />
 
         <RadioButton
             android:id="@+id/debug_button"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
             android:text="DEBUG"
-            android:layout_gravity="right"/>
+            android:layout_gravity="left"
+            />
 
     </RadioGroup>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            />
 
+    <Button
+        android:id="@+id/license_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
 
+        android:text="LICENSE"
+        android:layout_gravity="right"
+        />
 
-
-
+    </LinearLayout>
 
 
 

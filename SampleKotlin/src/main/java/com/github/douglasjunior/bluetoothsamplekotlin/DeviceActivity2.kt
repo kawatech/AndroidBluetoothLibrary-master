@@ -108,8 +108,8 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             wLong = winH
         }
 
-     //   wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
-           wLong = (wLong - 600) / 22            // 全部入るのはこれ
+        wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+     //      wLong = (wLong - 600) / 22            // 全部入るのはこれ
 
 
         var stmp = ""
@@ -576,6 +576,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
                 //     nn = nn and (0xFFF)
                 fvalue2 = nn.toFloat()               // kawa Floatに変換して使う
 
+                // IO0～IO5のデフォルト値
                 fvalue20 = 5.0f;
                 fvalue21 = 4.0f;
                 fvalue22 = 3.0f;
@@ -585,6 +586,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
 
                 v = buffer[i+4].toInt() and (0xFC)
                 nn = v.ushr(2)
+                // ビットごとにチェック、1なら線が立つ
                 if ((nn and 0x01) == 0x01) fvalue20 = 5.8f;
                 if ((nn and 0x02) == 0x02) fvalue21 = 4.8f;
                 if ((nn and 0x04) == 0x04) fvalue22 = 3.8f;
@@ -596,8 +598,6 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             }
         }
 
-
-     //   fvalue21 = tmpOffset.toFloat()          // 00 00 のオフセットを出力する
 
 
         // 赤のラインで12ビットの範囲の値でなければ、表示しない。これで見かけ上不連続なし
@@ -627,7 +627,7 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
         }
          */
 
-// STARTボタンをタップしたら表示する
+// STARTボタンをタップしたら表示する。ボタンの表示がSTOPになっている。
         if (start_btn.text == "STOP") {
             data.addEntry(Entry(fvalue1, set1.getEntryCount()), 0)
             data.addEntry(Entry(fvalue2, set2.getEntryCount()), 1)
