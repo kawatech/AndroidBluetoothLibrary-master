@@ -108,8 +108,8 @@ class DeviceActivity2 : AppCompatActivity(), OnBluetoothEventCallback, View.OnCl
             wLong = winH
         }
 
-        wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
-     //      wLong = (wLong - 600) / 22            // 全部入るのはこれ
+     //   wLong = (wLong - 840) / 7               // シャープのスマホで見えなくする
+           wLong = (wLong - 600) / 22            // 全部入るのはこれ
 
 
         var stmp = ""
