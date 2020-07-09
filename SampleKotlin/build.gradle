@@ -8,7 +8,7 @@ android {
     buildToolsVersion "26.0.3"
 
     defaultConfig {
-        applicationId "com.github.douglasjunior.bluetoothsamplekotlin"
+        applicationId "com.losteaka.no001.oscilloscopeapp"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
